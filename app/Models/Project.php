@@ -15,17 +15,11 @@ class Project extends Model
         'created_by',
     ];
 
-    /**
-     * Get the bugs inside this project folder.
-     */
     public function bugs()
     {
         return $this->hasMany(Bug::class, 'project_id');
     }
 
-    /**
-     * Get the user who created this project.
-     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');

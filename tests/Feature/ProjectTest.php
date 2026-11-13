@@ -98,13 +98,11 @@ class ProjectTest extends TestCase
             'created_by' => $qa->id,
         ]);
 
-        // Access the create bug form with project_id
         $formResponse = $this->actingAs($qa)->get(route('bugs.create', ['project_id' => $project->id]));
         $formResponse->assertStatus(200);
         $formResponse->assertSee('Point of Sales System');
         $formResponse->assertSee('Otomatis Terkunci');
 
-        // Submit the bug with project_id (no need to specify raw project string)
         $storeResponse = $this->actingAs($qa)->post(route('bugs.store'), [
             'title' => 'Print receipt alignment issue',
             'project_id' => $project->id,
@@ -146,7 +144,6 @@ class ProjectTest extends TestCase
         $qa = User::factory()->create(['role' => 'support_dev']);
         $dev = User::factory()->create(['role' => 'developer', 'name' => 'Developer Auto']);
 
-        // QA inputs a bug with project string, without creating any folder beforehand
         $response = $this->actingAs($qa)->post(route('bugs.store'), [
             'title' => 'Auto Grouped Bug',
             'project' => 'E-Commerce Platform',
@@ -158,14 +155,12 @@ class ProjectTest extends TestCase
 
         $response->assertRedirect(route('bugs'));
 
-        // Project folder should be automatically created in database
         $this->assertDatabaseHas('projects', [
             'name' => 'E-Commerce Platform',
         ]);
 
         $project = Project::where('name', 'E-Commerce Platform')->first();
 
-        // Bug should belong to this automatically created project folder
         $this->assertDatabaseHas('bugs', [
             'title' => 'Auto Grouped Bug',
             'project_id' => $project->id,
@@ -177,7 +172,6 @@ class ProjectTest extends TestCase
     {
         $dev = User::factory()->create(['role' => 'developer', 'name' => 'Dev Priority Tester']);
 
-        // Create P3 first, then P2, then P1 last (reverse chronological)
         $p3Bug = Bug::create([
             'title' => 'P3 Low Issue',
             'priority' => 'p3',
@@ -261,13 +255,12 @@ class ProjectTest extends TestCase
 
         $response = $this->actingAs($dev)->patch(route('bugs.status.update', $bug), [
             'status' => 'done_by_development',
-            'priority' => 'p3', // Dev tries to downgrade priority
+            'priority' => 'p3',
             'from_show' => 1,
         ]);
 
         $response->assertRedirect(route('bugs.show', $bug));
 
-        // Priority must stay p1
         $this->assertDatabaseHas('bugs', [
             'id' => $bug->id,
             'status' => 'done_by_development',
@@ -316,7 +309,6 @@ class ProjectTest extends TestCase
         $indexResponse->assertSee('Zahra QA');
         $indexResponse->assertSee('Obiwan QA');
 
-        // Check dropdown in create bug form distinguishes them
         $createBugResponse = $this->actingAs($qa1)->get(route('bugs.create'));
         $createBugResponse->assertStatus(200);
         $createBugResponse->assertSee('Socuit Duplicate (oleh Zahra QA)');

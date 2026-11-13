@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('projects', function (Blueprint $table) {
@@ -24,7 +21,6 @@ return new class extends Migration
             $table->foreignId('project_id')->nullable()->after('id')->constrained('projects')->nullOnDelete();
         });
 
-        // Migrate existing project strings into projects table
         $existingProjects = DB::table('bugs')
             ->whereNotNull('project')
             ->where('project', '!=', '')
@@ -44,9 +40,6 @@ return new class extends Migration
         }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('bugs', function (Blueprint $table) {

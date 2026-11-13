@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>QATrack - Folder: {{ $project->name }}</title>
-    <!-- Fonts and Icons -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -57,18 +57,16 @@
 </head>
 <body class="flex text-on-background font-body-md antialiased h-screen overflow-hidden" style="background-color: #F8FAFF;">
     @include('layouts.sidebar')
-    
+
     <div class="flex-1 ml-sidebar-width flex flex-col h-screen relative">
         @include('layouts.header', ['breadcrumb' => 'Projects / ' . $project->name])
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-y-auto mt-16 p-section-padding" style="background-color: #F8FAFF;">
             <div class="max-w-7xl mx-auto space-y-6">
-                
-                <!-- Header & Breadcrumbs -->
+
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
                     <div>
-                        <!-- Breadcrumb Path -->
+
                         <div class="flex items-center gap-2 text-xs font-semibold text-secondary mb-1.5">
                             <a href="{{ route('projects.index') }}" class="hover:text-primary transition-colors flex items-center gap-1.5">
                                 <span class="material-symbols-outlined text-[18px] folder-filled text-blue-600">folder</span>
@@ -77,8 +75,7 @@
                             <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
                             <span class="text-on-surface font-bold">{{ $project->name }}</span>
                         </div>
-                        
-                        <!-- Folder Title -->
+
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shrink-0">
                                 <span class="material-symbols-outlined text-[26px] folder-filled">folder_open</span>
@@ -99,7 +96,6 @@
                         </div>
                     </div>
 
-                    <!-- Right Top CTA: Add Bug Button -->
                     @if(auth()->user()->role !== 'developer')
                         <a href="{{ route('bugs.create', ['project_id' => $project->id]) }}" class="px-5 py-2.5 bg-primary text-white rounded-full text-sm font-semibold hover:opacity-90 shadow-md flex items-center gap-2 active:scale-95 transition-all self-start sm:self-center">
                             <span class="material-symbols-outlined text-[20px]">add</span>
@@ -108,7 +104,6 @@
                     @endif
                 </div>
 
-                <!-- Alert Notifications -->
                 @if (session('success'))
                     <div class="p-3.5 bg-green-50 border border-green-200 text-green-700 rounded-xl font-body-md text-sm flex items-center gap-2 shadow-sm">
                         <span class="material-symbols-outlined text-green-600 text-[20px]">check_circle</span>
@@ -116,14 +111,12 @@
                     </div>
                 @endif
 
-                <!-- Filter Controls (Drive Filter Bar) -->
                 <form method="GET" action="{{ route('projects.show', $project) }}" class="flex flex-wrap items-center gap-3 bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex items-center gap-1.5 px-2 text-secondary">
                         <span class="material-symbols-outlined text-[18px]">tune</span>
                         <span class="text-xs font-bold uppercase tracking-wider">Filter</span>
                     </div>
 
-                    <!-- Status Filter -->
                     <select name="status" onchange="this.form.submit()" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl py-1.5 pl-3 pr-8 text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer transition-colors">
                         <option value="">Status: All Statuses</option>
                         <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
@@ -133,7 +126,6 @@
                         <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed</option>
                     </select>
 
-                    <!-- Priority Filter -->
                     <select name="priority" onchange="this.form.submit()" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl py-1.5 pl-3 pr-8 text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer transition-colors">
                         <option value="">Priority: All</option>
                         <option value="p1" {{ request('priority') == 'p1' ? 'selected' : '' }}>P1 - Critical</option>
@@ -141,7 +133,6 @@
                         <option value="p3" {{ request('priority') == 'p3' ? 'selected' : '' }}>P3 - Medium</option>
                     </select>
 
-                    <!-- Developer Filter -->
                     @if (auth()->user()->role !== 'developer')
                         <select name="developer" onchange="this.form.submit()" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl py-1.5 pl-3 pr-8 text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer transition-colors">
                             <option value="">Developer: All</option>
@@ -156,7 +147,6 @@
                     @endif
                 </form>
 
-                <!-- Drive File Explorer Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     @if ($bugs->count() > 0)
                         <div class="overflow-x-auto">
@@ -174,7 +164,7 @@
                                 <tbody class="divide-y divide-slate-100 text-sm text-on-surface">
                                     @foreach ($bugs as $bug)
                                         <tr class="hover:bg-slate-50/80 transition-colors group cursor-pointer" onclick="if(!event.target.closest('a') && !event.target.closest('button')) { window.location.href='{{ route('bugs.show', $bug) }}'; }">
-                                            <!-- File / Bug Title with Icon -->
+
                                             <td class="py-3.5 px-5">
                                                 <div class="flex items-center gap-3">
                                                     <div class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
@@ -192,7 +182,6 @@
                                                 </div>
                                             </td>
 
-                                            <!-- Status -->
                                             <td class="py-3.5 px-4">
                                                 @if ($bug->status == 'open')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
@@ -217,7 +206,6 @@
                                                 @endif
                                             </td>
 
-                                            <!-- Priority -->
                                             <td class="py-3.5 px-4">
                                                 @if ($bug->priority == 'p1')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
@@ -234,7 +222,6 @@
                                                 @endif
                                             </td>
 
-                                            <!-- Developer -->
                                             <td class="py-3.5 px-4 text-xs">
                                                 @if ($bug->developer)
                                                     <div class="flex items-center gap-2">
@@ -248,12 +235,10 @@
                                                 @endif
                                             </td>
 
-                                            <!-- Date -->
                                             <td class="py-3.5 px-4 text-xs text-secondary">
                                                 {{ $bug->created_at->format('M d, Y') }}
                                             </td>
 
-                                            <!-- Action -->
                                             <td class="py-3.5 px-5 text-right">
                                                 <a href="{{ route('bugs.show', $bug) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-primary font-semibold text-xs rounded-lg transition-colors">
                                                     Open
@@ -265,7 +250,7 @@
                             </table>
                         </div>
                     @else
-                        <!-- Empty State inside folder -->
+
                         <div class="p-12 text-center">
                             <div class="w-16 h-16 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-4 text-primary">
                                 <span class="material-symbols-outlined text-[32px] folder-filled text-blue-500">folder_open</span>
@@ -287,3 +272,4 @@
     </div>
 </body>
 </html>
+

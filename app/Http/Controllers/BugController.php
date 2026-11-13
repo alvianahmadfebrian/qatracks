@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Storage;
 
 class BugController extends Controller
 {
-    /**
-     * Display a listing of the bugs.
-     */
     public function index(Request $request)
     {
         $query = Bug::query();
@@ -24,7 +21,6 @@ class BugController extends Controller
             $query->where('developer', $user->name);
         }
 
-        // Apply filtering if parameters are present
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -43,7 +39,6 @@ class BugController extends Controller
             $query->where('project', $request->project);
         }
 
-        // Bug automatically rises to top if priority is high/important (P1 Critical -> P2 High -> P3 Medium), then newest created
         $bugs = $query->orderByRaw("CASE priority WHEN 'p1' THEN 1 WHEN 'p2' THEN 2 WHEN 'p3' THEN 3 ELSE 4 END ASC")
             ->orderBy('created_at', 'desc')
             ->get();
@@ -51,7 +46,6 @@ class BugController extends Controller
         $developers = User::where('role', 'developer')->orderBy('name')->get();
         $projects = Project::with('creator')->orderBy('name')->get();
 
-        // Priority distribution metrics for the bugs view (Distribution by Priority)
         $priorityStatsQuery = Bug::query();
         if ($user->role === 'support_dev') {
             $priorityStatsQuery->where('reporter_id', $user->id);
@@ -70,9 +64,6 @@ class BugController extends Controller
         return view('bugs', compact('bugs', 'developers', 'projects', 'p1Count', 'p2Count', 'p3Count', 'p1Percent', 'p2Percent', 'p3Percent'));
     }
 
-    /**
-     * Show the form for creating a new bug.
-     */
     public function create(Request $request)
     {
         if ($request->user()->role === 'developer') {
@@ -92,9 +83,6 @@ class BugController extends Controller
         return view('bugs-create', compact('developers', 'projects', 'selectedProject'));
     }
 
-    /**
-     * Store a newly created bug in storage.
-     */
     public function store(Request $request)
     {
         if ($request->user()->role === 'developer') {
@@ -112,7 +100,6 @@ class BugController extends Controller
             'attachment' => ['nullable', 'file', 'max:5120'],
         ]);
 
-        // Auto-group into project folder directly by the system
         if (! empty($validated['project_id'])) {
             $projectObj = Project::find($validated['project_id']);
             if ($projectObj) {
@@ -131,7 +118,7 @@ class BugController extends Controller
             $validated['project_id'] = $projectObj->id;
             $validated['project'] = $projectObj->name;
         } else {
-            // Default project folder managed directly by the system
+
             $projectObj = Project::first() ?? Project::create([
                 'name' => 'General System',
                 'description' => 'Folder project sistem untuk tiket umum',
@@ -153,7 +140,6 @@ class BugController extends Controller
         $bug = Bug::create($validated);
         $projectLabel = $bug->project ? "[{$bug->project}] " : '';
 
-        // Notify Super Admins
         $superAdmins = User::where('role', 'super_admin')->where('id', '!=', $request->user()->id)->get();
         foreach ($superAdmins as $admin) {
             $admin->notify(new BugNotification(
@@ -166,7 +152,6 @@ class BugController extends Controller
             ));
         }
 
-        // If developer is assigned, notify the assigned developer
         if (! empty($bug->developer)) {
             $assignedDev = User::where('name', $bug->developer)->first();
             if ($assignedDev && $assignedDev->id !== $request->user()->id) {
@@ -181,7 +166,6 @@ class BugController extends Controller
             }
         }
 
-        // If priority is P1 (Critical), notify all other developers as urgent alert
         if ($bug->priority === 'p1') {
             $otherDevs = User::where('role', 'developer')
                 ->when(! empty($bug->developer), fn ($q) => $q->where('name', '!=', $bug->developer))
@@ -206,9 +190,6 @@ class BugController extends Controller
         return redirect()->route('bugs')->with('success', 'Bug reported successfully.');
     }
 
-    /**
-     * Display the specified bug.
-     */
     public function show(Request $request, Bug $bug)
     {
         $user = $request->user();
@@ -221,9 +202,6 @@ class BugController extends Controller
         return view('bugs-show', compact('bug', 'developers'));
     }
 
-    /**
-     * Update the status of a bug.
-     */
     public function updateStatus(Request $request, Bug $bug)
     {
         $user = $request->user();
@@ -251,7 +229,6 @@ class BugController extends Controller
 
         $bug->update($validated);
 
-        // Check if priority changed by QA or Admin
         if (! empty($validated['priority']) && $oldPriority !== $bug->priority) {
             $priorityLabels = ['p1' => 'P1 (Critical)', 'p2' => 'P2 (High)', 'p3' => 'P3 (Medium/Low)'];
             $newPriorityLabel = $priorityLabels[$bug->priority] ?? strtoupper($bug->priority);
@@ -288,7 +265,6 @@ class BugController extends Controller
             }
         }
 
-        // Check if developer assignment changed
         $newDeveloper = $bug->developer;
         if ($newDeveloper && $newDeveloper !== $oldDeveloper) {
             $assignedDev = User::where('name', $newDeveloper)->first();
@@ -304,7 +280,6 @@ class BugController extends Controller
             }
         }
 
-        // Check if status changed
         if ($oldStatus !== $bug->status) {
             $statusLabels = [
                 'open' => 'Open',
@@ -318,7 +293,6 @@ class BugController extends Controller
             ];
             $statusLabel = $statusLabels[$bug->status] ?? ucfirst($bug->status);
 
-            // 1. Notify reporter (support_dev) if someone else updated it
             if ($bug->reporter_id && $bug->reporter_id !== $user->id) {
                 $reporter = User::find($bug->reporter_id);
                 if ($reporter) {
@@ -333,7 +307,6 @@ class BugController extends Controller
                 }
             }
 
-            // 2. Notify assigned developer if someone else updated it
             if (! empty($bug->developer)) {
                 $assignedDev = User::where('name', $bug->developer)->first();
                 if ($assignedDev && $assignedDev->id !== $user->id && $assignedDev->id !== $bug->reporter_id) {
@@ -348,7 +321,6 @@ class BugController extends Controller
                 }
             }
 
-            // 3. Notify Super Admins (if not the one who updated)
             $superAdmins = User::where('role', 'super_admin')->where('id', '!=', $user->id)->get();
             foreach ($superAdmins as $admin) {
                 $admin->notify(new BugNotification(
@@ -369,9 +341,6 @@ class BugController extends Controller
         return redirect()->route('bugs')->with('success', 'Bug status updated successfully.');
     }
 
-    /**
-     * Remove the specified bug from storage.
-     */
     public function destroy(Request $request, Bug $bug)
     {
         $user = $request->user();

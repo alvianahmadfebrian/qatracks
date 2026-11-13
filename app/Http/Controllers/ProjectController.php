@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the project folders.
-     */
     public function index(Request $request)
     {
         $user = $request->user();
@@ -52,9 +49,6 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
-    /**
-     * Store a newly created project folder in storage.
-     */
     public function store(Request $request)
     {
         if ($request->user()->role === 'developer') {
@@ -73,9 +67,6 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project)->with('success', "Project folder '{$project->name}' created successfully.");
     }
 
-    /**
-     * Display the specified project folder and its bugs.
-     */
     public function show(Request $request, Project $project)
     {
         $project->load('creator');
@@ -100,7 +91,6 @@ class ProjectController extends Controller
             $query->where('developer', $request->developer);
         }
 
-        // Bug automatically rises to top if priority is high/important (P1 Critical -> P2 High -> P3 Medium)
         $bugs = $query->orderByRaw("CASE priority WHEN 'p1' THEN 1 WHEN 'p2' THEN 2 WHEN 'p3' THEN 3 ELSE 4 END ASC")
             ->orderBy('created_at', 'desc')
             ->get();
@@ -109,9 +99,6 @@ class ProjectController extends Controller
         return view('projects.show', compact('project', 'bugs', 'developers'));
     }
 
-    /**
-     * Remove the specified project folder from storage.
-     */
     public function destroy(Request $request, Project $project)
     {
         if ($request->user()->role !== 'super_admin' && $project->created_by !== $request->user()->id) {

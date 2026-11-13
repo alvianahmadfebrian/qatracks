@@ -10,9 +10,6 @@ use Illuminate\Database\Seeder;
 
 class NotificationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $yoda = User::where('role', 'super_admin')->first() ?? User::where('email', 'yoda@jedi.com')->first();
@@ -23,7 +20,6 @@ class NotificationSeeder extends Seeder
             $obiwan = User::first();
         }
 
-        // Seed default project folders directly into the system (Socuit, HaiHai, WCP, POCA)
         $projSocuit = Project::firstOrCreate(
             ['name' => 'Socuit'],
             [
@@ -56,7 +52,6 @@ class NotificationSeeder extends Seeder
             ]
         );
 
-        // Ensure sample bugs exist with automated project folder grouping
         $bug1 = Bug::firstOrCreate(
             ['title' => 'Gateway Timeout saat Checkout'],
             [
@@ -99,12 +94,10 @@ class NotificationSeeder extends Seeder
         );
         $bug3->update(['project_id' => $projWcp->id, 'project' => $projWcp->name]);
 
-        // Clear existing notifications to avoid duplicates on re-seed
         $yoda->notifications()->delete();
         $obiwan->notifications()->delete();
         $anakin->notifications()->delete();
 
-        // 1. Notifications for Super Admin (masteryoda)
         $yoda->notify(new BugNotification(
             title: 'Bug Baru Dilaporkan (P1)',
             message: "{$obiwan->name} melaporkan bug kritis #{$bug1->id}: '{$bug1->title}'",
@@ -132,7 +125,6 @@ class NotificationSeeder extends Seeder
             badgeColor: 'emerald'
         ));
 
-        // 2. Notifications for Support / QA (obiwan)
         $obiwan->notify(new BugNotification(
             title: 'Status Bug Diperbarui',
             message: "{$anakin->name} mulai mengerjakan bug #{$bug1->id} ('{$bug1->title}') yang Anda laporkan.",
@@ -160,7 +152,6 @@ class NotificationSeeder extends Seeder
             badgeColor: 'secondary'
         ));
 
-        // 3. Notifications for Developer (anakin)
         $anakin->notify(new BugNotification(
             title: 'Penugasan Bug Baru',
             message: "Anda telah ditugaskan untuk menangani bug #{$bug1->id}: '{$bug1->title}'",

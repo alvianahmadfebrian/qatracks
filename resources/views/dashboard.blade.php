@@ -4,17 +4,17 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Dashboard - QATrack Management System</title>
-    <!-- Material Symbols -->
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <!-- Google Fonts: Inter -->
+
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-    <!-- JetBrains Mono -->
+
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Tailwind Config -->
+
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -114,10 +114,9 @@
     @include('layouts.header')
     @include('layouts.sidebar')
 
-    <!-- Main Content Canvas -->
     <main class="ml-sidebar-width pt-16 min-h-screen" style="background-color: #F8FAFF;">
         <div class="p-section-padding max-w-7xl mx-auto">
-            <!-- Page Header -->
+
             <div class="mb-container-gap">
                 <h2 class="font-display-lg text-display-lg mb-1 font-semibold" style="color:#1e3a8a">Dashboard Overview</h2>
                 <p class="font-body-md text-body-md text-secondary">Welcome back, {{ auth()->user()->name }}! Real-time bug metrics and recent activity tracking.</p>
@@ -144,9 +143,9 @@
                 $p2Percent = min(100, round(($p2Count / $totalPriority) * 100));
                 $p3Percent = min(100, round(($p3Count / $totalPriority) * 100));
             @endphp
-            <!-- Bento Grid - Top Section -->
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-container-gap mb-container-gap">
-                <!-- Summary Card 1: Total Bugs (Biru) -->
+
                 <div class="bg-white rounded-xl p-6 shadow-xs border border-slate-200/80 border-t-4 border-t-blue-500 flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/70 flex items-center justify-center">
@@ -158,7 +157,7 @@
                         <h3 class="text-[38px] font-extrabold text-on-background tracking-tight leading-none mt-1">{{ $totalBugs }}</h3>
                     </div>
                 </div>
-                <!-- Summary Card 2: Open Issues (Merah) -->
+
                 <div class="bg-white rounded-xl p-6 shadow-xs border border-slate-200/80 border-t-4 border-t-red-500 flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-red-50 border border-red-200/70 flex items-center justify-center">
@@ -170,7 +169,7 @@
                         <h3 class="text-[38px] font-extrabold text-on-background tracking-tight leading-none mt-1">{{ $openCount }}</h3>
                     </div>
                 </div>
-                <!-- Summary Card 3: In Progress (Oranye) -->
+
                 <div class="bg-white rounded-xl p-6 shadow-xs border border-slate-200/80 border-t-4 border-t-orange-500 flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200/70 flex items-center justify-center">
@@ -182,7 +181,7 @@
                         <h3 class="text-[38px] font-extrabold text-on-background tracking-tight leading-none mt-1">{{ $inProgressCount }}</h3>
                     </div>
                 </div>
-                <!-- Summary Card 4: Fixed (Hijau) -->
+
                 <div class="bg-white rounded-xl p-6 shadow-xs border border-slate-200/80 border-t-4 border-t-emerald-500 flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/70 flex items-center justify-center">
@@ -195,9 +194,9 @@
                     </div>
                 </div>
             </div>
-            <!-- Complex Layout Grid - Bottom Section -->
+
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-container-gap">
-                <!-- Chart Area -->
+
                 <div class="lg:col-span-1 bg-white rounded-xl p-6 shadow-xs border border-slate-200/80 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
@@ -207,9 +206,9 @@
                             </span>
                         </div>
                         <p class="text-xs text-secondary mb-6">Klik pada tingkat prioritas untuk memfilter bug. Prioritas tinggi diposisikan teratas.</p>
-                        <!-- Faux Bar Chart with Clickable Navigation -->
+
                         <div class="flex flex-col gap-5">
-                            <!-- P1 Bar -->
+
                             <a href="{{ route('bugs', ['priority' => 'p1']) }}" class="block group cursor-pointer" title="Lihat semua bug P1 Critical">
                                 <div class="flex justify-between items-center mb-1.5">
                                     <span class="font-label-md text-label-md text-on-background flex items-center gap-2 group-hover:text-error transition-colors">
@@ -222,7 +221,7 @@
                                     <div class="bg-error h-full rounded-full transition-all duration-500" style="width: {{ $p1Percent }}%"></div>
                                 </div>
                             </a>
-                            <!-- P2 Bar -->
+
                             <a href="{{ route('bugs', ['priority' => 'p2']) }}" class="block group cursor-pointer" title="Lihat semua bug P2 High">
                                 <div class="flex justify-between items-center mb-1.5">
                                     <span class="font-label-md text-label-md text-on-background flex items-center gap-2 group-hover:text-amber-700 transition-colors">
@@ -235,7 +234,7 @@
                                     <div class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: {{ $p2Percent }}%"></div>
                                 </div>
                             </a>
-                            <!-- P3 Bar -->
+
                             <a href="{{ route('bugs', ['priority' => 'p3']) }}" class="block group cursor-pointer" title="Lihat semua bug P3 Medium">
                                 <div class="flex justify-between items-center mb-1.5">
                                     <span class="font-label-md text-label-md text-on-background flex items-center gap-2 group-hover:text-primary transition-colors">
@@ -255,7 +254,7 @@
                         <span>Bug P1 otomatis diprioritaskan di baris pertama.</span>
                     </div>
                 </div>
-                <!-- Recent Activity Table -->
+
                 <div class="lg:col-span-2 bg-white rounded-xl shadow-xs border border-slate-200/80 overflow-hidden flex flex-col">
                     <div class="p-5 border-b border-outline-variant/50 flex justify-between items-center bg-slate-50/50">
                         <div>
@@ -334,3 +333,4 @@
     </main>
 </body>
 </html>
+

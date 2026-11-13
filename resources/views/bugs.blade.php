@@ -4,12 +4,12 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>QATrack - Bugs List</title>
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Material Symbols -->
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
-    <!-- Tailwind Theme Configuration -->
+
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -100,7 +100,7 @@
       }
     </script>
     <style>
-        /* Base styles to ensure clean layout */
+
         body, main { background-color: #F8FAFF !important; margin: 0; padding: 0; }
         body { overflow-x: hidden; }
         .bg-surface-container-lowest, .bg-surface, .card-white { background-color: #ffffff !important; }
@@ -112,10 +112,9 @@
     <div class="flex-1 ml-sidebar-width flex flex-col h-screen relative">
         @include('layouts.header')
 
-        <!-- Main Scrollable Area -->
         <main class="flex-1 overflow-y-auto mt-16 p-section-padding" style="background-color: #F8FAFF;">
             <div class="max-w-7xl mx-auto space-y-container-gap">
-                <!-- Page Header -->
+
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">Bugs</h2>
@@ -129,7 +128,6 @@
                     @endif
                 </div>
 
-                <!-- Alert Notifications -->
                 @if (session('success'))
                     <div class="p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg font-body-md text-body-md flex items-center gap-2">
                         <span class="material-symbols-outlined text-green-600">check_circle</span>
@@ -147,7 +145,6 @@
                     </div>
                 @endif
 
-                <!-- Distribution by Priority Section (Dev Priority Tracking & Auto-Escalation) -->
                 <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200/80">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                         <div>
@@ -167,9 +164,8 @@
                         </div>
                     </div>
 
-                    <!-- Priority Bars Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- P1 Critical Card -->
+
                         <a href="{{ request()->fullUrlWithQuery(['priority' => 'p1']) }}" class="p-4 rounded-xl border {{ request('priority') == 'p1' ? 'border-error bg-red-50/70 ring-2 ring-error/20' : 'border-slate-200/80 hover:border-error/60 bg-white hover:bg-red-50/30' }} transition-all flex flex-col justify-between group cursor-pointer shadow-xs">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-center gap-2">
@@ -190,7 +186,6 @@
                             </div>
                         </a>
 
-                        <!-- P2 High Card -->
                         <a href="{{ request()->fullUrlWithQuery(['priority' => 'p2']) }}" class="p-4 rounded-xl border {{ request('priority') == 'p2' ? 'border-amber-500 bg-amber-50/70 ring-2 ring-amber-500/20' : 'border-slate-200/80 hover:border-amber-400 bg-white hover:bg-amber-50/30' }} transition-all flex flex-col justify-between group cursor-pointer shadow-xs">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-center gap-2">
@@ -211,7 +206,6 @@
                             </div>
                         </a>
 
-                        <!-- P3 Medium Card -->
                         <a href="{{ request()->fullUrlWithQuery(['priority' => 'p3']) }}" class="p-4 rounded-xl border {{ request('priority') == 'p3' ? 'border-blue-500 bg-blue-50/70 ring-2 ring-blue-500/20' : 'border-slate-200/80 hover:border-blue-400 bg-white hover:bg-blue-50/30' }} transition-all flex flex-col justify-between group cursor-pointer shadow-xs">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-center gap-2">
@@ -231,7 +225,6 @@
                     </div>
                 </div>
 
-                <!-- Filters & Controls Bar -->
                 <form method="GET" action="{{ route('bugs') }}" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200/80 flex flex-wrap items-center gap-4">
                     <div class="flex items-center gap-2 border-r border-outline-variant pr-4">
                         <span class="material-symbols-outlined text-outline">filter_list</span>
@@ -271,7 +264,7 @@
                         <a href="{{ route('bugs') }}" class="text-xs text-primary hover:underline ml-auto font-medium">Reset Filters</a>
                     @endif
                 </form>
-                <!-- Data Table Container -->
+
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
                     <div class="px-4 py-2.5 bg-slate-50 border-b border-outline-variant flex items-center justify-between text-xs text-secondary">
                         <span class="flex items-center gap-1.5 font-medium">
@@ -379,7 +372,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Table Footer / Pagination Placeholder -->
+
                     <div class="bg-surface-container-low border-t border-outline-variant p-4 flex items-center justify-between">
                         <p class="text-body-md font-body-md text-on-surface-variant">Showing 1 to {{ $bugs->count() }} of {{ $bugs->count() }} entries</p>
                         <div class="flex gap-2">
@@ -393,3 +386,4 @@
     </div>
 </body>
 </html>
+

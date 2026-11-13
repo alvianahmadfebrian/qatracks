@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    /**
-     * Get the authenticated user's notifications.
-     */
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -44,9 +41,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    /**
-     * Mark a specific notification as read.
-     */
     public function markAsRead(Request $request, string $id): JsonResponse
     {
         $notification = $request->user()->notifications()->where('id', $id)->firstOrFail();
@@ -58,9 +52,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    /**
-     * Mark all notifications as read.
-     */
     public function markAllAsRead(Request $request): JsonResponse
     {
         $request->user()->unreadNotifications->markAsRead();
@@ -71,9 +62,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    /**
-     * Delete a specific notification.
-     */
     public function destroy(Request $request, string $id): JsonResponse
     {
         $notification = $request->user()->notifications()->where('id', $id)->firstOrFail();
@@ -86,9 +74,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    /**
-     * Clear all notifications for the authenticated user.
-     */
     public function clearAll(Request $request): JsonResponse
     {
         $request->user()->notifications()->delete();

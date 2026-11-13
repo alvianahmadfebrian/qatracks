@@ -20,17 +20,11 @@ class Bug extends Model
         'attachment_size',
     ];
 
-    /**
-     * Get the user who reported the bug.
-     */
     public function reporter()
     {
         return $this->belongsTo(User::class, 'reporter_id');
     }
 
-    /**
-     * Get the project folder this bug belongs to.
-     */
     public function projectFolder()
     {
         return $this->belongsTo(Project::class, 'project_id');

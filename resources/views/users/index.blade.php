@@ -4,12 +4,12 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>QATrack - User Management</title>
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Material Symbols -->
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
-    <!-- Tailwind Theme Configuration -->
+
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -111,10 +111,9 @@
     <div class="flex-1 ml-sidebar-width flex flex-col h-screen relative">
         @include('layouts.header')
 
-        <!-- Main Scrollable Area -->
         <main class="flex-1 overflow-y-auto mt-16 p-section-padding" style="background-color: #F8FAFF;">
             <div class="max-w-7xl mx-auto space-y-container-gap">
-                <!-- Page Header -->
+
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">User Management</h2>
@@ -126,7 +125,6 @@
                     </a>
                 </div>
 
-                <!-- Alert Notifications -->
                 @if (session('success'))
                     <div class="p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg font-body-md text-body-md flex items-center gap-2">
                         <span class="material-symbols-outlined text-green-600">check_circle</span>
@@ -144,7 +142,6 @@
                     </div>
                 @endif
 
-                <!-- Data Table Container -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -193,7 +190,7 @@
                                                 <a href="{{ route('users.edit', $user) }}" class="p-1 text-on-surface-variant hover:text-primary transition-colors cursor-pointer" title="Edit User">
                                                     <span class="material-symbols-outlined text-[20px]">edit</span>
                                                 </a>
-                                                
+
                                                 @if (auth()->id() !== $user->id)
                                                     <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirmModal(event, 'Apakah Anda yakin ingin menghapus user ini? Tindakan ini tidak dapat dibatalkan.', 'Hapus User', 'danger', 'Ya, Hapus');">
                                                         @csrf
@@ -220,3 +217,4 @@
     </div>
 </body>
 </html>
+

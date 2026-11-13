@@ -14,9 +14,6 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test that guests are redirected to the login page from root.
-     */
     public function test_guest_is_redirected_to_login(): void
     {
         $response = $this->get('/');
@@ -25,9 +22,6 @@ class AuthTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /**
-     * Test that the login page loads successfully.
-     */
     public function test_login_page_renders(): void
     {
         $response = $this->get('/login');
@@ -39,9 +33,6 @@ class AuthTest extends TestCase
         $response->assertSee('Sign in to manage bugs and testing workflows.');
     }
 
-    /**
-     * Test guest password reset via forgot-password route.
-     */
     public function test_guest_can_reset_password(): void
     {
         $user = User::factory()->create([
@@ -62,9 +53,6 @@ class AuthTest extends TestCase
         $this->assertTrue(Hash::check('new-secure-password', $user->fresh()->password));
     }
 
-    /**
-     * Test login with valid credentials.
-     */
     public function test_login_with_valid_credentials(): void
     {
         $user = User::factory()->create([
@@ -82,9 +70,6 @@ class AuthTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    /**
-     * Test login with valid username (name) instead of email.
-     */
     public function test_login_with_valid_username(): void
     {
         $user = User::factory()->create([
@@ -102,9 +87,6 @@ class AuthTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    /**
-     * Test login with invalid credentials.
-     */
     public function test_login_fails_with_invalid_credentials(): void
     {
         User::factory()->create([
@@ -122,9 +104,6 @@ class AuthTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * Test dashboard is accessible to authenticated users.
-     */
     public function test_dashboard_accessible_to_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -136,9 +115,6 @@ class AuthTest extends TestCase
         $response->assertSee('Recent Activity');
     }
 
-    /**
-     * Test logout works.
-     */
     public function test_logout_redirects_to_login(): void
     {
         $user = User::factory()->create();
@@ -150,9 +126,6 @@ class AuthTest extends TestCase
         $this->assertGuest();
     }
 
-    /**
-     * Test bugs page is accessible to authenticated users.
-     */
     public function test_bugs_page_accessible_to_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -173,9 +146,6 @@ class AuthTest extends TestCase
         $response->assertSee('Marcus Reed');
     }
 
-    /**
-     * Test bug creation page requires authentication.
-     */
     public function test_bugs_create_page_requires_auth(): void
     {
         $response = $this->get('/bugs/create');
@@ -184,9 +154,6 @@ class AuthTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /**
-     * Test bug creation page loads for authenticated users.
-     */
     public function test_bugs_create_page_accessible_to_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -197,9 +164,6 @@ class AuthTest extends TestCase
         $response->assertSee('Report New Bug');
     }
 
-    /**
-     * Test validation rules are enforced when reporting a bug.
-     */
     public function test_store_bug_validates_required_fields(): void
     {
         $user = User::factory()->create();
@@ -213,9 +177,6 @@ class AuthTest extends TestCase
         $response->assertSessionHasErrors(['title', 'description']);
     }
 
-    /**
-     * Test successfully storing a reported bug.
-     */
     public function test_store_bug_creates_record_successfully(): void
     {
         $user = User::factory()->create();
@@ -242,9 +203,6 @@ class AuthTest extends TestCase
         ]);
     }
 
-    /**
-     * Test bug detail page requires authentication.
-     */
     public function test_bug_detail_page_requires_auth(): void
     {
         $bug = Bug::create([
@@ -261,9 +219,6 @@ class AuthTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /**
-     * Test bug detail page loads successfully for authenticated users.
-     */
     public function test_bug_detail_page_accessible_to_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -283,9 +238,6 @@ class AuthTest extends TestCase
         $response->assertSee('Test steps details reproducer.');
     }
 
-    /**
-     * Test bug detail page returns 404 for non-existent bug.
-     */
     public function test_bug_detail_page_returns_404_for_non_existent_bug(): void
     {
         $user = User::factory()->create();
@@ -295,9 +247,6 @@ class AuthTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /**
-     * Test reports page requires authentication.
-     */
     public function test_reports_page_requires_auth(): void
     {
         $response = $this->get('/reports');
@@ -306,9 +255,6 @@ class AuthTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /**
-     * Test reports page accessible to authenticated users.
-     */
     public function test_reports_page_accessible_to_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -320,9 +266,6 @@ class AuthTest extends TestCase
         $response->assertSee('Export to Excel');
     }
 
-    /**
-     * Test settings page requires authentication.
-     */
     public function test_settings_page_requires_auth(): void
     {
         $response = $this->get('/settings');
@@ -331,9 +274,6 @@ class AuthTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /**
-     * Test settings page loads for authenticated users.
-     */
     public function test_settings_page_accessible_to_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -346,9 +286,6 @@ class AuthTest extends TestCase
         $response->assertSee($user->email);
     }
 
-    /**
-     * Test updating profile name and email saves successfully.
-     */
     public function test_profile_update_saves_data_successfully(): void
     {
         $user = User::factory()->create([
@@ -372,16 +309,12 @@ class AuthTest extends TestCase
         ]);
     }
 
-    /**
-     * Test password updates validate current password and crypt new password successfully.
-     */
     public function test_password_update_validates_current_password_and_saves_successfully(): void
     {
         $user = User::factory()->create([
             'password' => bcrypt('correct-password'),
         ]);
 
-        // Attempt with wrong current password first
         $response = $this->actingAs($user)->put('/settings/password', [
             'current_password' => 'wrong-password',
             'password' => 'new-password-123',
@@ -391,7 +324,6 @@ class AuthTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHasErrors('current_password');
 
-        // Attempt with correct current password
         $response = $this->actingAs($user)->put('/settings/password', [
             'current_password' => 'correct-password',
             'password' => 'new-password-123',
@@ -405,25 +337,17 @@ class AuthTest extends TestCase
         $this->assertTrue(Hash::check('new-password-123', $user->fresh()->password));
     }
 
-    /**
-     * Test role-based routing restrictions for developers.
-     */
     public function test_developer_is_restricted_from_dashboard_and_reports(): void
     {
         $developer = User::factory()->create(['role' => 'developer']);
 
-        // Check dashboard redirect
         $response = $this->actingAs($developer)->get('/');
         $response->assertRedirect('/bugs');
 
-        // Check reports redirect
         $response = $this->actingAs($developer)->get('/reports');
         $response->assertRedirect('/bugs');
     }
 
-    /**
-     * Test developer scoping in bugs list.
-     */
     public function test_developer_only_sees_assigned_bugs(): void
     {
         $developer = User::factory()->create([
@@ -452,9 +376,6 @@ class AuthTest extends TestCase
         $response->assertDontSee('Unassigned Bug');
     }
 
-    /**
-     * Test support_dev scoping in bugs list.
-     */
     public function test_support_dev_only_sees_reported_bugs(): void
     {
         $supportDev = User::factory()->create(['role' => 'support_dev']);
@@ -481,9 +402,6 @@ class AuthTest extends TestCase
         $response->assertDontSee('Other Bug');
     }
 
-    /**
-     * Test developer status update restrictions.
-     */
     public function test_developer_status_update_restrictions(): void
     {
         $developer = User::factory()->create([
@@ -499,7 +417,6 @@ class AuthTest extends TestCase
             'description' => 'Test',
         ]);
 
-        // Developer starts progress
         $response = $this->actingAs($developer)->post("/bugs/{$bug->id}/status", [
             '_method' => 'PATCH',
             'status' => 'in_progress',
@@ -507,7 +424,6 @@ class AuthTest extends TestCase
         $response->assertRedirect(route('bugs'));
         $this->assertEquals('in_progress', $bug->fresh()->status);
 
-        // Developer tries to close (which is restricted)
         $response = $this->actingAs($developer)->post("/bugs/{$bug->id}/status", [
             '_method' => 'PATCH',
             'status' => 'closed',
@@ -516,27 +432,19 @@ class AuthTest extends TestCase
         $this->assertEquals('in_progress', $bug->fresh()->status);
     }
 
-    /**
-     * Test that user management CRUD page is accessible only to super_admin.
-     */
     public function test_user_management_restricted_to_super_admin(): void
     {
         $superAdmin = User::factory()->create(['role' => 'super_admin']);
         $developer = User::factory()->create(['role' => 'developer']);
 
-        // Super Admin access
         $response = $this->actingAs($superAdmin)->get('/users');
         $response->assertStatus(200);
         $response->assertSee('User Management');
 
-        // Developer access (restricted)
         $response = $this->actingAs($developer)->get('/users');
         $response->assertStatus(403);
     }
 
-    /**
-     * Test user creation works for super_admin.
-     */
     public function test_user_creation_by_super_admin(): void
     {
         $superAdmin = User::factory()->create(['role' => 'super_admin']);
@@ -556,9 +464,6 @@ class AuthTest extends TestCase
         ]);
     }
 
-    /**
-     * Test user deletion restricted for self deletion.
-     */
     public function test_user_self_deletion_prevented(): void
     {
         $superAdmin = User::factory()->create(['role' => 'super_admin']);
@@ -568,9 +473,6 @@ class AuthTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $superAdmin->id]);
     }
 
-    /**
-     * Test bug creation form and bug views list actual developers from database.
-     */
     public function test_bug_views_list_actual_database_developers(): void
     {
         $superAdmin = User::factory()->create(['role' => 'super_admin']);
@@ -589,9 +491,6 @@ class AuthTest extends TestCase
         $response->assertDontSee('Sarah Jenkins');
     }
 
-    /**
-     * Test header contains user profile dropdown with profile link.
-     */
     public function test_header_contains_profile_dropdown(): void
     {
         $user = User::factory()->create(['name' => 'ProfileUser']);
@@ -602,9 +501,6 @@ class AuthTest extends TestCase
         $response->assertSee(route('settings'), false);
     }
 
-    /**
-     * Test bug creation with attachment upload.
-     */
     public function test_bug_creation_with_attachment_upload(): void
     {
         Storage::fake('public');
@@ -629,9 +525,6 @@ class AuthTest extends TestCase
         Storage::disk('public')->assertExists($bug->attachment);
     }
 
-    /**
-     * Test bug deletion by super admin.
-     */
     public function test_bug_deletion_by_super_admin(): void
     {
         $admin = User::factory()->create(['role' => 'super_admin']);
@@ -652,23 +545,17 @@ class AuthTest extends TestCase
         $this->assertDatabaseMissing('bugs', ['id' => $bug->id]);
     }
 
-    /**
-     * Test that developers cannot access bug creation or see Add New Bug button.
-     */
     public function test_developer_cannot_create_or_report_bugs(): void
     {
         $developer = User::factory()->create(['role' => 'developer']);
 
-        // Cannot see Add New Bug button on bugs list
         $response = $this->actingAs($developer)->get(route('bugs'));
         $response->assertStatus(200);
         $response->assertDontSee('Add New Bug');
 
-        // Cannot access create form
         $createResponse = $this->actingAs($developer)->get(route('bugs.create'));
         $createResponse->assertStatus(403);
 
-        // Cannot post to create bug
         $storeResponse = $this->actingAs($developer)->post(route('bugs.store'), [
             'title' => 'Dev Unauthorized Bug',
             'priority' => 'p1',
@@ -678,9 +565,6 @@ class AuthTest extends TestCase
         $storeResponse->assertStatus(403);
     }
 
-    /**
-     * Test that developers cannot see developer filter dropdown and cannot access other developers' bugs.
-     */
     public function test_developer_cannot_see_developer_filter_or_view_others_bugs(): void
     {
         $dev1 = User::factory()->create(['name' => 'DevOne', 'role' => 'developer']);
@@ -702,31 +586,24 @@ class AuthTest extends TestCase
             'description' => 'For DevTwo only',
         ]);
 
-        // DevOne list view - no developer filter, sees own bug, does not see other bug
         $response = $this->actingAs($dev1)->get(route('bugs'));
         $response->assertStatus(200);
         $response->assertDontSee('All Developers');
         $response->assertSee('Bug for DevOne');
         $response->assertDontSee('Bug for DevTwo');
 
-        // DevOne attempting to filter by DevTwo should still only see own bug
         $filterResponse = $this->actingAs($dev1)->get(route('bugs', ['developer' => 'DevTwo']));
         $filterResponse->assertStatus(200);
         $filterResponse->assertSee('Bug for DevOne');
         $filterResponse->assertDontSee('Bug for DevTwo');
 
-        // DevOne cannot view DevTwo bug details
         $viewOtherResponse = $this->actingAs($dev1)->get(route('bugs.show', $bug2));
         $viewOtherResponse->assertStatus(403);
 
-        // DevOne can view own bug details
         $viewOwnResponse = $this->actingAs($dev1)->get(route('bugs.show', $bug1));
         $viewOwnResponse->assertStatus(200);
     }
 
-    /**
-     * Test Excel export for reports.
-     */
     public function test_reports_excel_export(): void
     {
         $admin = User::factory()->create(['role' => 'super_admin']);
@@ -741,7 +618,6 @@ class AuthTest extends TestCase
             'reporter_id' => $admin->id,
         ]);
 
-        // Admin can view reports page and download excel
         $reportsPage = $this->actingAs($admin)->get(route('reports'));
         $reportsPage->assertStatus(200);
         $reportsPage->assertSee('Export to Excel');
@@ -751,7 +627,6 @@ class AuthTest extends TestCase
         $exportResponse->assertStatus(200);
         $exportResponse->assertHeader('Content-Type', 'application/vnd.ms-excel; charset=UTF-8');
 
-        // Developer is redirected from reports page and forbidden from export
         $devPage = $this->actingAs($dev)->get(route('reports'));
         $devPage->assertRedirect(route('bugs'));
 

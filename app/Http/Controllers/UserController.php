@@ -10,9 +10,6 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    /**
-     * Enforce super_admin check.
-     */
     private function authorizeAdmin(): void
     {
         if (auth()->user()->role !== 'super_admin') {
@@ -20,9 +17,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display a listing of the users.
-     */
     public function index()
     {
         $this->authorizeAdmin();
@@ -32,9 +26,6 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new user.
-     */
     public function create()
     {
         $this->authorizeAdmin();
@@ -42,9 +33,6 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    /**
-     * Store a newly created user in storage.
-     */
     public function store(Request $request)
     {
         $this->authorizeAdmin();
@@ -60,7 +48,6 @@ class UserController extends Controller
 
         $newUser = User::create($validated);
 
-        // Welcome notification to new user
         $newUser->notify(new BugNotification(
             title: 'Selamat Datang di QATrack!',
             message: "Akun Anda telah aktif dengan role: {$newUser->role}.",
@@ -72,9 +59,6 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified user.
-     */
     public function edit(User $user)
     {
         $this->authorizeAdmin();
@@ -82,9 +66,6 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified user in storage.
-     */
     public function update(Request $request, User $user)
     {
         $this->authorizeAdmin();
@@ -107,9 +88,6 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Remove the specified user from storage.
-     */
     public function destroy(User $user)
     {
         $this->authorizeAdmin();

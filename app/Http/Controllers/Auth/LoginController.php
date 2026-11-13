@@ -10,17 +10,11 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle an authentication attempt.
-     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -28,7 +22,6 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Support logging in via email (or username fallback if exists)
         $loginField = filter_var($credentials['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         $authData = [
@@ -47,9 +40,6 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    /**
-     * Handle password reset for guests via the forgot password popup.
-     */
     public function resetPassword(Request $request)
     {
         $validated = $request->validate([
@@ -79,9 +69,6 @@ class LoginController extends Controller
         ])->withInput()->with('show_reset_modal', true);
     }
 
-    /**
-     * Log the user out of the application.
-     */
     public function logout(Request $request)
     {
         Auth::logout();

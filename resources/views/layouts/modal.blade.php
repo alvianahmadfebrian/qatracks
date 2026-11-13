@@ -1,12 +1,12 @@
-<!-- Global Confirmation & Alert Modal Component -->
+
 <div id="global-action-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-200 opacity-0 pointer-events-none" style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);">
     <div id="global-modal-card" class="bg-surface rounded-2xl shadow-2xl border border-outline-variant max-w-md w-full p-6 transform scale-95 transition-all duration-200 flex flex-col gap-4 text-left">
         <div class="flex items-start gap-3.5">
-            <!-- Dynamic Icon Container -->
+
             <div id="global-modal-icon-container" class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-red-100 text-red-600 transition-colors">
                 <span id="global-modal-icon" class="material-symbols-outlined text-[26px]">delete_forever</span>
             </div>
-            
+
             <div class="flex-1 min-w-0 pt-0.5">
                 <h3 id="global-modal-title" class="font-headline-sm text-base text-on-surface font-bold mb-1">Konfirmasi Tindakan</h3>
                 <p id="global-modal-message" class="text-sm font-body-md text-on-surface-variant leading-relaxed">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
@@ -134,7 +134,6 @@
             openModal();
         };
 
-        // Form submission confirmation helper
         window.confirmModal = function (event, message, title = 'Konfirmasi Hapus', type = 'danger', confirmText = 'Ya, Hapus') {
             if (event) {
                 event.preventDefault();
@@ -186,3 +185,4 @@
         });
     })();
 </script>
+

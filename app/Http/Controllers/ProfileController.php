@@ -8,17 +8,11 @@ use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
-    /**
-     * Show the account settings form.
-     */
     public function edit()
     {
         return view('settings');
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function updateProfile(Request $request)
     {
         $user = $request->user();
@@ -33,9 +27,6 @@ class ProfileController extends Controller
         return redirect()->route('settings')->with('status', 'profile-updated');
     }
 
-    /**
-     * Update the user's password.
-     */
     public function updatePassword(Request $request)
     {
         $validated = $request->validate([

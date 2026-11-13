@@ -105,7 +105,6 @@
     @include('layouts.sidebar')
     @include('layouts.header')
 
-    <!-- Main Content Canvas -->
     <main class="ml-sidebar-width mt-16 p-section-padding min-h-[calc(100vh-64px)] max-w-7xl mx-auto" style="background-color: #F8FAFF;">
         @if (session('success'))
             <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between shadow-xs">
@@ -130,7 +129,6 @@
             </div>
         @endif
 
-        <!-- Header Section -->
         <div class="flex justify-between items-start mb-container-gap">
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-3 text-label-md font-label-md text-secondary">
@@ -194,14 +192,12 @@
                     $role = auth()->user()->role;
                 @endphp
 
-                <!-- Developer Actions -->
                 @if ($role === 'developer')
                     <form action="{{ route('bugs.status.update', $bug) }}" method="POST" class="flex flex-wrap items-center gap-3 bg-white p-2 border border-slate-200/80 rounded-xl shadow-xs">
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="from_show" value="1"/>
 
-                        <!-- Status Selector -->
                         <div class="flex items-center gap-2 pl-2">
                             <label for="dev-status-select" class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Status:</label>
                             <select id="dev-status-select" name="status" class="bg-surface-container-low border border-outline-variant/60 rounded-lg py-1.5 pl-3 pr-8 font-medium text-xs text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer">
@@ -211,7 +207,6 @@
                             </select>
                         </div>
 
-                        <!-- Apply Button -->
                         <button type="submit" class="px-4 py-1.5 text-white rounded-lg hover:opacity-90 font-medium text-xs flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all ml-1" style="background-color:#1e3a8a;">
                             <span class="material-symbols-outlined text-[16px]">save</span>
                             <span>Apply</span>
@@ -220,14 +215,12 @@
 
                 @endif
 
-                <!-- Support Dev / QA & Super Admin Actions -->
                 @if ($role === 'super_admin' || $role === 'support_dev')
                     <form action="{{ route('bugs.status.update', $bug) }}" method="POST" class="flex flex-wrap items-center gap-3 bg-white p-2 border border-slate-200/80 rounded-xl shadow-xs">
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="from_show" value="1"/>
-                        
-                        <!-- Status Selector -->
+
                         <div class="flex items-center gap-2 pl-2">
                             <label for="status-select" class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Status:</label>
                             <select id="status-select" name="status" class="bg-surface-container-low border border-outline-variant/60 rounded-lg py-1.5 pl-3 pr-8 font-medium text-xs text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer">
@@ -238,10 +231,9 @@
                                 <option value="closed" {{ $bug->status === 'closed' ? 'selected' : '' }}>Closed</option>
                             </select>
                         </div>
-                        
+
                         <div class="h-6 w-px bg-outline-variant/60 hidden sm:block"></div>
 
-                        <!-- Priority Selector -->
                         <div class="flex items-center gap-2">
                             <label for="priority-select" class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Priority:</label>
                             <select id="priority-select" name="priority" class="bg-surface-container-low border border-outline-variant/60 rounded-lg py-1.5 pl-3 pr-8 font-medium text-xs text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer">
@@ -250,10 +242,9 @@
                                 <option value="p3" {{ strtolower($bug->priority) === 'p3' ? 'selected' : '' }}>P3 (Low)</option>
                             </select>
                         </div>
-                        
+
                         <div class="h-6 w-px bg-outline-variant/60 hidden sm:block"></div>
-                        
-                        <!-- Assignee Selector -->
+
                         <div class="flex items-center gap-2">
                             <label for="developer-select" class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Assignee:</label>
                             <select id="developer-select" name="developer" class="bg-surface-container-low border border-outline-variant/60 rounded-lg py-1.5 pl-3 pr-8 font-medium text-xs text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer">
@@ -263,8 +254,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
-                        <!-- Apply Button -->
+
                         <button type="submit" class="px-4 py-1.5 text-white rounded-lg hover:opacity-90 font-medium text-xs flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all ml-1" style="background-color:#1e3a8a;">
                             <span class="material-symbols-outlined text-[16px]">save</span>
                             <span>Apply</span>
@@ -275,9 +265,9 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-container-gap">
-            <!-- Left Column: Details & Attachments -->
+
             <div class="lg:col-span-2 flex flex-col gap-container-gap">
-                <!-- Description Card -->
+
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-6">
                     <h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Description</h3>
                     <div class="text-body-lg font-body-lg text-on-surface-variant leading-relaxed whitespace-pre-line">
@@ -285,7 +275,6 @@
                     </div>
                 </div>
 
-                <!-- Attachments Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-headline-sm font-headline-sm text-on-surface">Attachments</h3>
@@ -344,9 +333,8 @@
                 </div>
             </div>
 
-            <!-- Right Column: Meta & Timeline -->
             <div class="flex flex-col gap-container-gap">
-                <!-- Meta Info Card -->
+
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-6">
                     <h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Informasi Bug</h3>
                     <div class="space-y-4">
@@ -401,12 +389,11 @@
                     </div>
                 </div>
 
-                <!-- History Timeline -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-6">
                     <h3 class="text-headline-sm font-headline-sm text-on-surface mb-6">Activity Timeline</h3>
                     <div class="relative space-y-6 before:absolute before:top-4 before:bottom-4 before:left-[15px] before:w-[2px] before:bg-outline-variant/70">
                         @if ($bug->status !== 'open')
-                            <!-- Timeline Item: Status Change -->
+
                             <div class="relative flex items-start gap-4">
                                 <div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center shrink-0 z-10 shadow-xs">
                                     <span class="material-symbols-outlined text-[16px] text-primary">sync</span>
@@ -421,7 +408,7 @@
                         @endif
 
                         @if ($bug->developer && $bug->developer !== 'Unassigned')
-                            <!-- Timeline Item: Assignment -->
+
                             <div class="relative flex items-start gap-4">
                                 <div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-blue-600 flex items-center justify-center shrink-0 z-10 shadow-xs">
                                     <span class="material-symbols-outlined text-[16px] text-blue-600">person_add</span>
@@ -435,7 +422,6 @@
                             </div>
                         @endif
 
-                        <!-- Timeline Item: Created -->
                         <div class="relative flex items-start gap-4">
                             <div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center shrink-0 z-10 shadow-xs">
                                 <span class="material-symbols-outlined text-[16px] text-secondary">bug_report</span>
@@ -454,3 +440,4 @@
     </main>
 </body>
 </html>
+

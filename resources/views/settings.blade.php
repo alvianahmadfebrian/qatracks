@@ -114,16 +114,14 @@
     <div class="flex-1 ml-sidebar-width flex flex-col h-screen relative">
         @include('layouts.header')
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-y-auto mt-16 p-section-padding" style="background-color: #F8FAFF;">
             <div class="max-w-7xl mx-auto space-y-container-gap">
-                <!-- Page Header -->
+
                 <div class="mb-8">
                     <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">Account Settings</h2>
                     <p class="text-body-md font-body-md text-secondary mt-1">Manage your profiles, change passwords, and configure account parameters.</p>
                 </div>
 
-                <!-- Toast Notifications -->
                 @if (session('status') === 'profile-updated')
                     <div class="mb-6 p-4 bg-primary-container/10 border border-primary/20 text-primary text-xs rounded-xl flex items-center gap-2">
                         <span class="material-symbols-outlined text-[18px]">check_circle</span>
@@ -138,7 +136,6 @@
                     </div>
                 @endif
 
-                <!-- Validation Errors Block -->
                 @if ($errors->any())
                     <div class="mb-6 p-4 rounded-xl bg-[#ffdad6] border border-[#ba1a1a]/20 text-[#93000a] text-xs flex items-start gap-2">
                         <span class="material-symbols-outlined text-[18px] shrink-0">error</span>
@@ -150,38 +147,37 @@
                     </div>
                 @endif
 
-                <!-- Layout Split columns -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-container-gap">
-                    <!-- Profile Details -->
+
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-6 flex flex-col justify-between">
                         <div>
                             <h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Profile Information</h3>
                             <p class="text-body-md text-secondary mb-6">Update your account's profile information and email address.</p>
-                            
+
                             <form action="{{ route('settings.profile.update') }}" method="POST" class="space-y-4">
                                 @csrf
                                 @method('PATCH')
-                                
+
                                 <div>
                                     <label class="block font-label-md text-label-md text-on-surface mb-2" for="name">Name</label>
-                                    <input 
-                                        type="text" 
-                                        id="name" 
-                                        name="name" 
-                                        value="{{ old('name', auth()->user()->name) }}" 
-                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" 
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value="{{ old('name', auth()->user()->name) }}"
+                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
                                         required
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <label class="block font-label-md text-label-md text-on-surface mb-2" for="email">Email address</label>
-                                    <input 
-                                        type="email" 
-                                        id="email" 
-                                        name="email" 
-                                        value="{{ old('email', auth()->user()->email) }}" 
-                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" 
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value="{{ old('email', auth()->user()->email) }}"
+                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
                                         required
                                     />
                                 </div>
@@ -195,45 +191,44 @@
                         </div>
                     </div>
 
-                    <!-- Password Security -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-6 flex flex-col justify-between">
                         <div>
                             <h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Update Password</h3>
                             <p class="text-body-md text-secondary mb-6">Ensure your account is using a long, random password to stay secure.</p>
-                            
+
                             <form action="{{ route('settings.password.update') }}" method="POST" class="space-y-4">
                                 @csrf
                                 @method('PUT')
-                                
+
                                 <div>
                                     <label class="block font-label-md text-label-md text-on-surface mb-2" for="current_password">Current Password</label>
-                                    <input 
-                                        type="password" 
-                                        id="current_password" 
-                                        name="current_password" 
-                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" 
+                                    <input
+                                        type="password"
+                                        id="current_password"
+                                        name="current_password"
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
                                         required
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <label class="block font-label-md text-label-md text-on-surface mb-2" for="password">New Password</label>
-                                    <input 
-                                        type="password" 
-                                        id="password" 
-                                        name="password" 
-                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" 
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
                                         required
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <label class="block font-label-md text-label-md text-on-surface mb-2" for="password_confirmation">Confirm Password</label>
-                                    <input 
-                                        type="password" 
-                                        id="password_confirmation" 
-                                        name="password_confirmation" 
-                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" 
+                                    <input
+                                        type="password"
+                                        id="password_confirmation"
+                                        name="password_confirmation"
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
                                         required
                                     />
                                 </div>
@@ -252,3 +247,4 @@
     </div>
 </body>
 </html>
+

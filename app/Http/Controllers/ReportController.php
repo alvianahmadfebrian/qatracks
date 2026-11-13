@@ -8,9 +8,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
-    /**
-     * Build filtered query based on request parameters.
-     */
     private function buildFilteredQuery(Request $request)
     {
         $user = $request->user();
@@ -20,7 +17,6 @@ class ReportController extends Controller
             $query->where('reporter_id', $user->id);
         }
 
-        // 1. Period filter (Date range)
         $period = $request->input('period', '30days');
         if ($period === '7days') {
             $query->where('created_at', '>=', now()->subDays(7));
@@ -31,19 +27,15 @@ class ReportController extends Controller
         } elseif ($period === 'this_year') {
             $query->where('created_at', '>=', now()->startOfYear());
         }
-        // 'all' means all time
 
-        // 2. Project filter
         if ($request->filled('project')) {
             $query->where('project', $request->project);
         }
 
-        // 3. Priority filter
         if ($request->filled('priority')) {
             $query->where('priority', $request->priority);
         }
 
-        // 4. Status filter
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -51,9 +43,6 @@ class ReportController extends Controller
         return $query;
     }
 
-    /**
-     * Display the reports analytics page.
-     */
     public function index(Request $request)
     {
         if ($request->user()->role === 'developer') {
@@ -65,15 +54,12 @@ class ReportController extends Controller
 
         $totalBugsCount = $bugs->count();
 
-        // Unique projects for filter dropdown
         $projects = Bug::whereNotNull('project')->where('project', '!=', '')->distinct('project')->pluck('project');
 
-        // Developers metric
         $devs = $bugs->whereNotNull('developer')->where('developer', '!=', '')->pluck('developer')->unique();
         $devCount = max($devs->count(), 1);
         $bugsPerDev = $totalBugsCount > 0 ? round($totalBugsCount / $devCount, 1) : 0;
 
-        // Avg resolution time in days (for resolved/fixed/closed bugs)
         $resolvedBugs = $bugs->whereIn('status', ['fixed', 'resolved', 'closed']);
         if ($resolvedBugs->count() > 0) {
             $totalDays = $resolvedBugs->reduce(function ($carry, $bug) {
@@ -100,9 +86,6 @@ class ReportController extends Controller
         ));
     }
 
-    /**
-     * Export bugs data to Excel (.xls).
-     */
     public function exportExcel(Request $request): StreamedResponse
     {
         $user = $request->user();

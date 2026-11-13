@@ -111,7 +111,6 @@
     @include('layouts.sidebar')
     @include('layouts.header')
 
-    <!-- Main Content -->
     <main class="ml-sidebar-width mt-16 w-full h-[calc(100vh-64px)] overflow-y-auto p-section-padding" style="background-color: #F8FAFF;">
         <div class="max-w-4xl mx-auto">
             <div class="mb-8">
@@ -119,7 +118,6 @@
                 <p class="text-body-md font-body-md text-secondary mt-1">Provide detailed information to help the team reproduce and fix the issue.</p>
             </div>
 
-            <!-- Validation Errors Block -->
             @if ($errors->any())
                 <div class="mb-6 p-4 rounded-xl bg-[#ffdad6] border border-[#ba1a1a]/20 text-[#93000a] text-xs flex items-start gap-2">
                     <span class="material-symbols-outlined text-[18px] shrink-0">error</span>
@@ -131,12 +129,11 @@
                 </div>
             @endif
 
-            <!-- Form -->
             <form class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-container-gap" action="{{ route('bugs.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="space-y-6">
                     @if($selectedProject)
-                        <!-- Locked Project Folder Banner -->
+
                         <input type="hidden" name="project_id" value="{{ $selectedProject->id }}"/>
                         <input type="hidden" name="project" value="{{ $selectedProject->name }}"/>
                         <input type="hidden" name="from_project" value="1"/>
@@ -154,31 +151,30 @@
                             <span class="text-xs px-2.5 py-1 rounded-full bg-blue-200/60 text-primary font-semibold">Otomatis Terkunci</span>
                         </div>
 
-                        <!-- Title Input Full Width -->
                         <div>
                             <label class="block font-label-md text-label-md text-on-surface mb-2" for="bugTitle">Bug Title <span class="text-error">*</span></label>
-                            <input 
-                                class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow placeholder-outline {{ $errors->has('title') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}" 
-                                id="bugTitle" 
-                                name="title" 
+                            <input
+                                class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow placeholder-outline {{ $errors->has('title') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}"
+                                id="bugTitle"
+                                name="title"
                                 value="{{ old('title') }}"
-                                placeholder="Judul bug" 
-                                required 
+                                placeholder="Judul bug"
+                                required
                                 type="text"
                             />
                         </div>
                     @else
-                        <!-- Title & Project Selector Grid -->
+
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="md:col-span-2">
                                 <label class="block font-label-md text-label-md text-on-surface mb-2" for="bugTitle">Bug Title <span class="text-error">*</span></label>
-                                <input 
-                                    class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow placeholder-outline {{ $errors->has('title') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}" 
-                                    id="bugTitle" 
-                                    name="title" 
+                                <input
+                                    class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow placeholder-outline {{ $errors->has('title') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}"
+                                    id="bugTitle"
+                                    name="title"
                                     value="{{ old('title') }}"
-                                    placeholder="Judul bug" 
-                                    required 
+                                    placeholder="Judul bug"
+                                    required
                                     type="text"
                                 />
                             </div>
@@ -192,12 +188,12 @@
                                     <option value="custom" {{ old('project') ? 'selected' : '' }}>+ Input Project Baru...</option>
                                 </select>
                                 <div id="custom-project-wrapper" class="{{ old('project') ? '' : 'hidden' }} mt-2">
-                                    <input 
-                                        class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow placeholder-outline border-outline-variant focus:border-primary focus:ring-primary" 
-                                        id="project" 
-                                        name="project" 
+                                    <input
+                                        class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow placeholder-outline border-outline-variant focus:border-primary focus:ring-primary"
+                                        id="project"
+                                        name="project"
                                         value="{{ old('project') }}"
-                                        placeholder="Ketik nama project baru (contoh: Core Banking, POS System)" 
+                                        placeholder="Ketik nama project baru (contoh: Core Banking, POS System)"
                                         type="text"
                                     />
                                 </div>
@@ -209,9 +205,8 @@
                         </div>
                     @endif
 
-                    <!-- Dropdowns -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Priority -->
+
                         <div>
                             <label class="block font-label-md text-label-md text-on-surface mb-2" for="priority">Priority</label>
                             <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2.5 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow cursor-pointer" id="priority" name="priority">
@@ -221,7 +216,6 @@
                             </select>
                         </div>
 
-                        <!-- Status -->
                         <div>
                             <label class="block font-label-md text-label-md text-on-surface mb-2" for="status">Status</label>
                             <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2.5 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow cursor-pointer" id="status" name="status">
@@ -232,7 +226,6 @@
                             </select>
                         </div>
 
-                        <!-- Assignee -->
                         <div>
                             <label class="block font-label-md text-label-md text-on-surface mb-2" for="assignee">Assign Developer</label>
                             <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2.5 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow cursor-pointer" id="assignee" name="developer">
@@ -244,29 +237,25 @@
                         </div>
                     </div>
 
-                    <!-- Description -->
                     <div>
                         <label class="block font-label-md text-label-md text-on-surface mb-2" for="description">Description &amp; Steps to Reproduce <span class="text-error">*</span></label>
-                        <textarea 
-                            class="w-full bg-surface-container-lowest border rounded-lg px-4 py-3 text-body-md font-mono-code focus:outline-none focus:ring-1 transition-shadow placeholder-outline resize-y {{ $errors->has('description') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}" 
-                            id="description" 
-                            name="description" 
-                            placeholder="Tuliskan deskripsi dan langkah-langkah untuk mereproduksi bug..." 
-                            required 
+                        <textarea
+                            class="w-full bg-surface-container-lowest border rounded-lg px-4 py-3 text-body-md font-mono-code focus:outline-none focus:ring-1 transition-shadow placeholder-outline resize-y {{ $errors->has('description') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}"
+                            id="description"
+                            name="description"
+                            placeholder="Tuliskan deskripsi dan langkah-langkah untuk mereproduksi bug..."
+                            required
                             rows="5"
                         >{{ old('description') }}</textarea>
                     </div>
 
-                    <!-- Attachments -->
                     <div>
                         <label class="block font-label-md text-label-md text-on-surface mb-2">Attachments</label>
-                        
-                        <!-- Hidden File Input -->
+
                         <input type="file" id="attachment" name="attachment" class="hidden" accept="image/*,.pdf,.txt,.log,.zip">
 
-                        <!-- Drag & Drop Zone -->
                         <div id="drop-zone" class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center bg-surface hover:bg-surface-container-low transition-all cursor-pointer group relative">
-                            <!-- Default State -->
+
                             <div id="upload-prompt" class="flex flex-col items-center justify-center pointer-events-none">
                                 <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                                     <span class="material-symbols-outlined text-primary text-[24px]">cloud_upload</span>
@@ -275,7 +264,6 @@
                                 <p class="font-body-md text-body-md text-secondary text-center">or click to browse files (Max 5MB)</p>
                             </div>
 
-                            <!-- Selected File Preview -->
                             <div id="file-preview-card" class="hidden w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl p-3.5 flex items-center justify-between shadow-sm">
                                 <div class="flex items-center gap-3 overflow-hidden">
                                     <div id="preview-thumbnail-container" class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center overflow-hidden shrink-0 border border-outline-variant/60">
@@ -295,7 +283,6 @@
                     </div>
                 </div>
 
-                <!-- Footer Buttons -->
                 <div class="mt-8 pt-6 border-t border-outline-variant/30 flex justify-end gap-4">
                     <a href="{{ route('bugs') }}" class="px-6 py-2.5 rounded-button font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center" type="button">
                         Cancel
@@ -308,7 +295,6 @@
         </div>
     </main>
 
-    <!-- File Upload Interaction Script -->
     <script>
         function handleProjectChange(val) {
             const wrapper = document.getElementById('custom-project-wrapper');
@@ -338,20 +324,17 @@
 
             if (!dropZone || !fileInput) return;
 
-            // Open file picker on click (unless clicking remove button)
             dropZone.addEventListener('click', function (e) {
                 if (e.target.closest('#remove-file-btn')) return;
                 fileInput.click();
             });
 
-            // Handle file selection from picker
             fileInput.addEventListener('change', function () {
                 if (fileInput.files && fileInput.files[0]) {
                     handleFile(fileInput.files[0]);
                 }
             });
 
-            // Drag & drop events
             ['dragenter', 'dragover'].forEach(eventName => {
                 dropZone.addEventListener(eventName, function (e) {
                     e.preventDefault();
@@ -376,7 +359,6 @@
                 }
             });
 
-            // Remove selected file
             if (removeBtn) {
                 removeBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
@@ -389,7 +371,7 @@
             }
 
             function handleFile(file) {
-                // Check size (Max 5MB)
+
                 if (file.size > 5 * 1024 * 1024) {
                     window.showAlertModal({
                         title: 'Ukuran File Terlalu Besar',
@@ -433,3 +415,4 @@
     </script>
 </body>
 </html>
+

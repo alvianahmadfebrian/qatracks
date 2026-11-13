@@ -11,7 +11,7 @@ use App\Models\Bug;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
-    // Notifications
+
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
         if ($user->role === 'support_dev') {
             $query->where('reporter_id', $user->id);
         }
-        // Bug automatically rises to top if priority is high/important (P1 Critical -> P2 High -> P3 Medium)
+
         $recentBugs = $query->orderByRaw("CASE priority WHEN 'p1' THEN 1 WHEN 'p2' THEN 2 WHEN 'p3' THEN 3 ELSE 4 END ASC")
             ->orderBy('created_at', 'desc')
             ->take(5)
@@ -36,13 +36,11 @@ Route::middleware('auth')->group(function () {
         return view('dashboard', compact('recentBugs'));
     })->name('dashboard');
 
-    // Projects (Folder Project)
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 
-    // Bugs
     Route::get('/bugs', [BugController::class, 'index'])->name('bugs');
     Route::get('/bugs/create', [BugController::class, 'create'])->name('bugs.create');
     Route::post('/bugs', [BugController::class, 'store'])->name('bugs.store');

@@ -5,7 +5,7 @@
 @endphp
 
 <header class="h-16 fixed top-0 right-0 z-30 bg-surface border-b border-outline-variant flex justify-between items-center w-[calc(100%-260px)] px-grid-margin transition-all duration-200">
-    <!-- Left Side: Search or Breadcrumb -->
+
     <div class="flex-1 flex items-center">
         <button id="sidebar-toggle-btn" class="text-on-surface-variant hover:text-primary transition-all p-1.5 rounded-lg hover:bg-surface-container-low mr-3 flex items-center justify-center cursor-pointer active:scale-95 duration-100" title="Toggle Sidebar">
             <span class="material-symbols-outlined text-[22px]">menu</span>
@@ -22,24 +22,21 @@
         @endif
     </div>
 
-    <!-- Right Side: Trailing Actions -->
     <div class="flex items-center gap-5">
         <div class="flex items-center gap-2 relative">
-            <!-- Notification Bell Trigger & Dropdown Container -->
+
             <div class="relative" id="notification-wrapper">
                 <button id="notification-bell-btn" type="button" class="text-on-surface-variant hover:text-primary hover:bg-surface-container-low p-2 rounded-xl transition-all relative flex items-center justify-center cursor-pointer active:scale-95 duration-100" title="Notifikasi" aria-label="Notifikasi" aria-expanded="false">
                     <span class="material-symbols-outlined text-[24px]">notifications</span>
-                    
-                    <!-- Notification Badge Indicator -->
+
                     <span id="notification-badge" class="{{ $initialUnreadCount > 0 ? '' : 'hidden' }} absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-error"></span>
                     </span>
                 </button>
 
-                <!-- Notification Dropdown Menu -->
                 <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-[420px] bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col transition-all duration-200 origin-top-right">
-                    <!-- Dropdown Header -->
+
                     <div class="p-4 border-b border-outline-variant/60 flex items-center justify-between bg-surface-container-low/40">
                         <div class="flex items-center gap-2">
                             <h3 class="font-headline-sm text-headline-sm text-on-surface text-base">Notifikasi</h3>
@@ -59,7 +56,6 @@
                         </div>
                     </div>
 
-                    <!-- Filter Tabs -->
                     <div class="flex border-b border-outline-variant/50 px-4 pt-1 bg-surface-bright text-xs">
                         <button id="tab-all" type="button" class="tab-btn active-tab py-2 px-3 border-b-2 border-primary font-semibold text-primary flex items-center gap-1.5 transition-colors cursor-pointer">
                             Semua
@@ -71,7 +67,6 @@
                         </button>
                     </div>
 
-                    <!-- Notification Items Container -->
                     <div id="notification-list" class="max-h-[360px] overflow-y-auto divide-y divide-outline-variant/30">
                         @forelse($initialNotifications as $notif)
                             @php
@@ -85,7 +80,7 @@
                                  data-id="{{ $notif->id }}"
                                  data-read="{{ $isRead ? 'true' : 'false' }}"
                                  data-url="{{ $url }}">
-                                <!-- Icon Badge -->
+
                                 <div class="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center
                                     @if($badgeColor === 'error') bg-error-container text-on-error-container
                                     @elseif($badgeColor === 'emerald') bg-emerald-100 text-emerald-700
@@ -94,7 +89,6 @@
                                     <span class="material-symbols-outlined text-[19px]">{{ $icon }}</span>
                                 </div>
 
-                                <!-- Text Details -->
                                 <div class="flex-1 min-w-0 pr-6">
                                     <div class="flex items-center justify-between gap-1 mb-0.5">
                                         <p class="text-xs font-semibold text-on-surface truncate {{ $isRead ? '' : 'font-bold text-primary' }}">
@@ -110,7 +104,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Right Actions: Unread dot & Delete button -->
                                 <div class="absolute right-3 top-3.5 flex flex-col items-center gap-2">
                                     @if(!$isRead)
                                         <span class="unread-dot w-2 h-2 rounded-full bg-neutral-900 ring-2 ring-neutral-900/20"></span>
@@ -131,7 +124,6 @@
                         @endforelse
                     </div>
 
-                    <!-- Dropdown Footer -->
                     <div class="p-2.5 bg-surface-container-low/60 border-t border-outline-variant/60 text-center">
                         <a href="{{ route('bugs') }}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary-fixed-variant transition-colors py-1 px-3 rounded-lg hover:bg-surface-container-high">
                             <span>Buka Daftar Bug & Tiket</span>
@@ -141,11 +133,8 @@
                 </div>
             </div>
 
-        
-
         <div class="w-px h-6 bg-outline-variant"></div>
 
-        <!-- User Profile Dropdown Container -->
         <div class="relative" id="user-profile-wrapper">
             <button id="user-profile-btn" type="button" class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-100" title="{{ $currentUser->name }}" aria-expanded="false">
                 <div class="text-right">
@@ -159,9 +148,8 @@
                 <span class="material-symbols-outlined text-[18px] text-secondary transition-transform duration-200" id="profile-chevron">expand_more</span>
             </button>
 
-            <!-- User Profile Dropdown Menu -->
             <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl z-50 overflow-hidden flex flex-col transition-all duration-200 origin-top-right">
-                <!-- User Summary -->
+
                 <div class="p-3.5 border-b border-outline-variant/60 bg-surface-container-low/40">
                     <p class="text-xs font-semibold text-on-surface truncate">{{ $currentUser->name }}</p>
                     <p class="text-[11px] text-secondary truncate mt-0.5">{{ $currentUser->email }}</p>
@@ -174,7 +162,6 @@
                     </div>
                 </div>
 
-                <!-- Menu Links -->
                 <div class="p-1.5 flex flex-col gap-0.5">
                     <a href="{{ route('settings') }}" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-on-surface rounded-lg hover:bg-surface-container-high transition-colors {{ request()->routeIs('settings') ? 'bg-blue-50 font-bold text-primary' : '' }}">
                         <span class="material-symbols-outlined text-[18px] text-secondary">person</span>
@@ -182,7 +169,6 @@
                     </a>
                 </div>
 
-                <!-- Logout Link -->
                 <div class="p-1.5 border-t border-outline-variant/60">
                     <a href="#" onclick="event.preventDefault(); document.getElementById('header-logout-form').submit();" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-error rounded-lg hover:bg-error-container/30 transition-colors cursor-pointer">
                         <span class="material-symbols-outlined text-[18px] text-error">logout</span>
@@ -197,7 +183,6 @@
     </div>
 </header>
 
-<!-- Notification & Profile Dropdown Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const bellBtn = document.getElementById('notification-bell-btn');
@@ -219,7 +204,6 @@
         const csrfToken = '{{ csrf_token() }}';
         let currentFilter = 'all';
 
-        // Toggle user profile dropdown
         if (profileBtn && profileDropdown) {
             profileBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -259,7 +243,6 @@
             if (profileChevron) profileChevron.style.transform = 'rotate(0deg)';
         }
 
-        // Toggle notification dropdown open/close
         if (bellBtn && dropdown) {
             bellBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -274,14 +257,12 @@
                 }
             });
 
-            // Close when clicking outside
             document.addEventListener('click', function (e) {
                 if (!dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
                     closeDropdown();
                 }
             });
 
-            // Close on Escape key
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     closeDropdown();
@@ -292,7 +273,7 @@
         function openDropdown() {
             dropdown.classList.remove('hidden');
             bellBtn.setAttribute('aria-expanded', 'true');
-            // Refresh notifications when opened
+
             fetchNotifications(currentFilter);
         }
 
@@ -301,7 +282,6 @@
             bellBtn.setAttribute('aria-expanded', 'false');
         }
 
-        // Tab Switching
         if (tabAll && tabUnread) {
             tabAll.addEventListener('click', function () {
                 switchTab('all');
@@ -366,7 +346,6 @@
             listContainer.insertAdjacentHTML('beforeend', emptyHtml);
         }
 
-        // Handle item click & mark as read
         listContainer.addEventListener('click', function (e) {
             const deleteBtn = e.target.closest('.delete-notif-btn');
             if (deleteBtn) {
@@ -392,7 +371,6 @@
             }
         });
 
-        // Mark single notification as read
         function markAsRead(id, itemElement) {
             fetch(`/notifications/${id}/read`, {
                 method: 'POST',
@@ -424,7 +402,6 @@
             .catch(err => console.error('Error marking as read:', err));
         }
 
-        // Mark all as read
         if (markAllReadBtn) {
             markAllReadBtn.addEventListener('click', function () {
                 fetch('/notifications/read-all', {
@@ -459,7 +436,6 @@
             });
         }
 
-        // Delete single notification
         function deleteNotification(id, itemElement) {
             fetch(`/notifications/${id}`, {
                 method: 'DELETE',
@@ -481,7 +457,6 @@
             .catch(err => console.error('Error deleting notification:', err));
         }
 
-        // Clear all notifications
         if (clearAllBtn) {
             clearAllBtn.addEventListener('click', function () {
                 window.showConfirmModal({
@@ -512,7 +487,6 @@
             });
         }
 
-        // Update badge and count labels
         function updateUnreadUI(count) {
             if (badge) {
                 if (count > 0) {
@@ -534,7 +508,6 @@
             }
         }
 
-        // Fetch fresh notifications via AJAX
         function fetchNotifications(filter) {
             fetch(`/notifications?filter=${filter}`, {
                 headers: {
@@ -549,7 +522,6 @@
             .catch(err => console.error('Error fetching notifications:', err));
         }
 
-        // Poll in background every 30 seconds for new notifications
         setInterval(function () {
             fetchNotifications(currentFilter);
         }, 30000);

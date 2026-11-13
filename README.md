@@ -161,7 +161,8 @@ Berikut adalah rincian file-file yang digunakan dalam sistem QATrack beserta int
 ## 🚀 Panduan Instalasi & Menjalankan Aplikasi
 
 ### 📋 Prasyarat
-- **PHP 8.2+** (dengan ekstensi `pdo_sqlite`, `mbstring`, `curl` aktif)
+- **PHP 8.2+** (dengan ekstensi `pdo_mysql`, `mbstring`, `curl` aktif)
+- **MySQL 8.0+**
 - **Composer**
 - **Node.js & NPM**
 
@@ -189,10 +190,9 @@ Berikut adalah rincian file-file yang digunakan dalam sistem QATrack beserta int
    php artisan key:generate
    ```
 
-5. **Buat File Database SQLite**
-   ```powershell
-   # Windows PowerShell:
-   New-Item -ItemType File -Path database/database.sqlite -Force
+5. **Buat Database MySQL**
+   ```sql
+   CREATE DATABASE qatrack;
    ```
 
 6. **Jalankan Migrasi & Seeder Akun + Notifikasi Bawaan**
