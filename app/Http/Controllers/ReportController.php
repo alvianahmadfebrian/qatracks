@@ -10,12 +10,7 @@ class ReportController extends Controller
 {
     private function buildFilteredQuery(Request $request)
     {
-        $user = $request->user();
         $query = Bug::with('reporter');
-
-        if ($user->role === 'support_dev') {
-            $query->where('reporter_id', $user->id);
-        }
 
         $period = $request->input('period', '30days');
         if ($period === '7days') {

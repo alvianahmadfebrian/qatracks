@@ -24,9 +24,6 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('bugs');
         }
         $query = Bug::query();
-        if ($user->role === 'support_dev') {
-            $query->where('reporter_id', $user->id);
-        }
 
         $recentBugs = $query->orderByRaw("CASE priority WHEN 'p1' THEN 1 WHEN 'p2' THEN 2 WHEN 'p3' THEN 3 ELSE 4 END ASC")
             ->orderBy('created_at', 'desc')

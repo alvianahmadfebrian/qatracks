@@ -399,7 +399,7 @@ class AuthTest extends TestCase
 
         $response = $this->actingAs($supportDev)->get('/bugs');
         $response->assertSee('Reported Bug');
-        $response->assertDontSee('Other Bug');
+        $response->assertSee('Other Bug');
     }
 
     public function test_developer_status_update_restrictions(): void

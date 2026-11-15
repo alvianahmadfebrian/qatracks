@@ -15,9 +15,7 @@ class BugController extends Controller
     {
         $query = Bug::query();
         $user = $request->user();
-        if ($user->role === 'support_dev') {
-            $query->where('reporter_id', $user->id);
-        } elseif ($user->role === 'developer') {
+        if ($user->role === 'developer') {
             $query->where('developer', $user->name);
         }
 
@@ -47,9 +45,7 @@ class BugController extends Controller
         $projects = Project::with('creator')->orderBy('name')->get();
 
         $priorityStatsQuery = Bug::query();
-        if ($user->role === 'support_dev') {
-            $priorityStatsQuery->where('reporter_id', $user->id);
-        } elseif ($user->role === 'developer') {
+        if ($user->role === 'developer') {
             $priorityStatsQuery->where('developer', $user->name);
         }
 

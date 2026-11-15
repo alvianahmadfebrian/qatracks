@@ -124,9 +124,7 @@
             @php
                 $user = auth()->user();
                 $baseQuery = \App\Models\Bug::query();
-                if ($user->role === 'support_dev') {
-                    $baseQuery->where('reporter_id', $user->id);
-                } elseif ($user->role === 'developer') {
+                if ($user->role === 'developer') {
                     $baseQuery->where('developer', $user->name);
                 }
 

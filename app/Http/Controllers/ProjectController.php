@@ -24,24 +24,18 @@ class ProjectController extends Controller
                 $q->whereIn('status', ['new', 'open']);
                 if ($user->role === 'developer') {
                     $q->where('developer', $user->name);
-                } elseif ($user->role === 'support_dev') {
-                    $q->where('reporter_id', $user->id);
                 }
             },
             'bugs as in_progress_bugs_count' => function ($q) use ($user) {
                 $q->where('status', 'in_progress');
                 if ($user->role === 'developer') {
                     $q->where('developer', $user->name);
-                } elseif ($user->role === 'support_dev') {
-                    $q->where('reporter_id', $user->id);
                 }
             },
             'bugs as resolved_bugs_count' => function ($q) use ($user) {
                 $q->whereIn('status', ['done_by_development', 'done_by_support_qa', 'fixed', 'closed', 'resolved']);
                 if ($user->role === 'developer') {
                     $q->where('developer', $user->name);
-                } elseif ($user->role === 'support_dev') {
-                    $q->where('reporter_id', $user->id);
                 }
             },
         ])->orderBy('name')->get();
@@ -73,9 +67,7 @@ class ProjectController extends Controller
         $user = $request->user();
         $query = $project->bugs();
 
-        if ($user->role === 'support_dev') {
-            $query->where('reporter_id', $user->id);
-        } elseif ($user->role === 'developer') {
+        if ($user->role === 'developer') {
             $query->where('developer', $user->name);
         }
 
