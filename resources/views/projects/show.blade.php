@@ -119,10 +119,10 @@
 
                     <select name="status" onchange="this.form.submit()" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl py-1.5 pl-3 pr-8 text-xs font-semibold text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer transition-colors">
                         <option value="">Status: All Statuses</option>
-                        <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
+                        <option value="new" {{ request('status') == 'new' ? 'selected' : '' }}>New</option>
                         <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="fixed" {{ request('status') == 'fixed' ? 'selected' : '' }}>Fixed</option>
-                        <option value="retest" {{ request('status') == 'retest' ? 'selected' : '' }}>Retest</option>
+                        <option value="done_by_development" {{ request('status') == 'done_by_development' ? 'selected' : '' }}>Done by Development</option>
+                        <option value="done_by_support_qa" {{ request('status') == 'done_by_support_qa' ? 'selected' : '' }}>Done by Support/QA</option>
                         <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed</option>
                     </select>
 
@@ -183,21 +183,21 @@
                                             </td>
 
                                             <td class="py-3.5 px-4">
-                                                @if ($bug->status == 'open')
+                                                @if ($bug->status == 'new' || $bug->status == 'open')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Open
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> New
                                                     </span>
                                                 @elseif ($bug->status == 'in_progress')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
                                                         <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> In Progress
                                                     </span>
-                                                @elseif ($bug->status == 'fixed' || $bug->status == 'resolved')
+                                                @elseif ($bug->status == 'done_by_development' || $bug->status == 'fixed' || $bug->status == 'resolved')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Fixed
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done by Development
                                                     </span>
-                                                @elseif ($bug->status == 'retest')
+                                                @elseif ($bug->status == 'done_by_support_qa' || $bug->status == 'retest')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> Retest
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> Done by Support/QA
                                                     </span>
                                                 @elseif ($bug->status == 'closed')
                                                     <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">

@@ -21,7 +21,7 @@ class ProjectController extends Controller
         $projects = $query->with('creator')->withCount([
             'bugs',
             'bugs as open_bugs_count' => function ($q) use ($user) {
-                $q->where('status', 'open');
+                $q->whereIn('status', ['new', 'open']);
                 if ($user->role === 'developer') {
                     $q->where('developer', $user->name);
                 } elseif ($user->role === 'support_dev') {
@@ -37,7 +37,7 @@ class ProjectController extends Controller
                 }
             },
             'bugs as resolved_bugs_count' => function ($q) use ($user) {
-                $q->whereIn('status', ['fixed', 'closed', 'resolved']);
+                $q->whereIn('status', ['done_by_development', 'done_by_support_qa', 'fixed', 'closed', 'resolved']);
                 if ($user->role === 'developer') {
                     $q->where('developer', $user->name);
                 } elseif ($user->role === 'support_dev') {
@@ -80,7 +80,15 @@ class ProjectController extends Controller
         }
 
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            if ($request->status === 'new') {
+                $query->whereIn('status', ['new', 'open']);
+            } elseif ($request->status === 'done_by_development') {
+                $query->whereIn('status', ['done_by_development', 'fixed', 'resolved']);
+            } elseif ($request->status === 'done_by_support_qa') {
+                $query->whereIn('status', ['done_by_support_qa', 'retest']);
+            } else {
+                $query->where('status', $request->status);
+            }
         }
 
         if ($request->filled('priority')) {
