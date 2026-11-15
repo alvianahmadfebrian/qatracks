@@ -12,25 +12,52 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-
         User::factory()->create([
-            'name' => 'masteryoda',
-            'email' => 'yoda@jedi.com',
+            'name' => 'bsn',
+            'email' => 'bsn@qatrack.com',
             'password' => bcrypt('pisangkeju'),
             'role' => 'super_admin',
         ]);
 
         User::factory()->create([
-            'name' => 'obiwan',
-            'email' => 'obiwan@jedi.com',
-            'password' => bcrypt('pisangkeju'),
+            'name' => 'zahra',
+            'email' => 'zahra@qatrack.com',
+            'password' => bcrypt('12345678'),
             'role' => 'support_dev',
         ]);
 
         User::factory()->create([
-            'name' => 'anakin',
-            'email' => 'anakin@jedi.com',
-            'password' => bcrypt('pisangkeju'),
+            'name' => 'mila',
+            'email' => 'mila@qatrack.com',
+            'password' => bcrypt('12345678'),
+            'role' => 'support_dev',
+        ]);
+
+        User::factory()->create([
+            'name' => 'satrio',
+            'email' => 'satrio@qatrack.com',
+            'password' => bcrypt('12345678'),
+            'role' => 'support_dev',
+        ]);
+
+        User::factory()->create([
+            'name' => 'alvian',
+            'email' => 'alvian@qatrack.com',
+            'password' => bcrypt('12345678'),
+            'role' => 'developer',
+        ]);
+
+        User::factory()->create([
+            'name' => 'andri',
+            'email' => 'andri@qatrack.com',
+            'password' => bcrypt('12345678'),
+            'role' => 'developer',
+        ]);
+
+        User::factory()->create([
+            'name' => 'dinda',
+            'email' => 'dinda@qatrack.com',
+            'password' => bcrypt('12345678'),
             'role' => 'developer',
         ]);
 

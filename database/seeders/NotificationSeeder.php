@@ -12,19 +12,15 @@ class NotificationSeeder extends Seeder
 {
     public function run(): void
     {
-        $yoda = User::where('role', 'super_admin')->first() ?? User::where('email', 'yoda@jedi.com')->first();
-        $obiwan = User::where('role', 'support_dev')->first() ?? User::where('email', 'obiwan@jedi.com')->first();
-        $anakin = User::where('role', 'developer')->first() ?? User::where('email', 'anakin@jedi.com')->first();
-
-        if (! $obiwan) {
-            $obiwan = User::first();
-        }
+        $admin = User::where('role', 'super_admin')->first() ?? User::first();
+        $qa = User::where('role', 'support_dev')->first() ?? User::first();
+        $dev = User::where('role', 'developer')->first() ?? User::first();
 
         $projSocuit = Project::firstOrCreate(
             ['name' => 'Socuit'],
             [
                 'description' => 'Aplikasi dan layanan platform Socuit',
-                'created_by' => $obiwan->id,
+                'created_by' => $qa->id,
             ]
         );
 
@@ -32,7 +28,7 @@ class NotificationSeeder extends Seeder
             ['name' => 'HaiHai'],
             [
                 'description' => 'Aplikasi platform interaksi dan komunikasi HaiHai',
-                'created_by' => $obiwan->id,
+                'created_by' => $qa->id,
             ]
         );
 
@@ -40,7 +36,7 @@ class NotificationSeeder extends Seeder
             ['name' => 'WCP'],
             [
                 'description' => 'Project Web Client Portal / Platform WCP',
-                'created_by' => $obiwan->id,
+                'created_by' => $qa->id,
             ]
         );
 
@@ -48,7 +44,7 @@ class NotificationSeeder extends Seeder
             ['name' => 'POCA'],
             [
                 'description' => 'Project Point of Customer Access / Aplikasi POCA',
-                'created_by' => $obiwan->id,
+                'created_by' => $qa->id,
             ]
         );
 
@@ -59,9 +55,9 @@ class NotificationSeeder extends Seeder
                 'project' => $projSocuit->name,
                 'priority' => 'p1',
                 'status' => 'in_progress',
-                'developer' => 'anakin',
+                'developer' => $dev->name,
                 'description' => 'Gateway timeout 504 terjadi saat memproses pembayaran checkout dengan kartu kredit pada beban tinggi.',
-                'reporter_id' => $obiwan->id,
+                'reporter_id' => $qa->id,
             ]
         );
         $bug1->update(['project_id' => $projSocuit->id, 'project' => $projSocuit->name]);
@@ -72,10 +68,10 @@ class NotificationSeeder extends Seeder
                 'project_id' => $projHaiHai->id,
                 'project' => $projHaiHai->name,
                 'priority' => 'p2',
-                'status' => 'open',
-                'developer' => 'anakin',
+                'status' => 'new',
+                'developer' => $dev->name,
                 'description' => 'Drawer navigasi samping tidak merespon sentuhan saat dibuka pada layar resolusi mobile di bawah 768px.',
-                'reporter_id' => $obiwan->id,
+                'reporter_id' => $qa->id,
             ]
         );
         $bug2->update(['project_id' => $projHaiHai->id, 'project' => $projHaiHai->name]);
@@ -86,64 +82,64 @@ class NotificationSeeder extends Seeder
                 'project_id' => $projWcp->id,
                 'project' => $projWcp->name,
                 'priority' => 'p3',
-                'status' => 'fixed',
-                'developer' => 'anakin',
+                'status' => 'done_by_development',
+                'developer' => $dev->name,
                 'description' => 'Penggunaan RAM melonjak hingga 512MB saat melakukan export 10.000 data log ke format CSV.',
-                'reporter_id' => $obiwan->id,
+                'reporter_id' => $qa->id,
             ]
         );
         $bug3->update(['project_id' => $projWcp->id, 'project' => $projWcp->name]);
 
-        $yoda->notifications()->delete();
-        $obiwan->notifications()->delete();
-        $anakin->notifications()->delete();
+        $admin->notifications()->delete();
+        $qa->notifications()->delete();
+        $dev->notifications()->delete();
 
-        $yoda->notify(new BugNotification(
+        $admin->notify(new BugNotification(
             title: 'Bug Baru Dilaporkan (P1)',
-            message: "{$obiwan->name} melaporkan bug kritis #{$bug1->id}: '{$bug1->title}'",
+            message: "{$qa->name} melaporkan bug kritis #{$bug1->id}: '{$bug1->title}'",
             type: 'bug_created',
             bugId: $bug1->id,
             icon: 'bug_report',
             badgeColor: 'error'
         ));
 
-        $yoda->notify(new BugNotification(
+        $admin->notify(new BugNotification(
             title: 'Penugasan Developer',
-            message: "{$anakin->name} ditugaskan untuk menangani bug #{$bug1->id}: '{$bug1->title}'",
+            message: "{$dev->name} ditugaskan untuk menangani bug #{$bug1->id}: '{$bug1->title}'",
             type: 'assigned',
             bugId: $bug1->id,
             icon: 'person_add',
             badgeColor: 'primary'
         ));
 
-        $yoda->notify(new BugNotification(
+        $admin->notify(new BugNotification(
             title: 'Bug Telah Diperbaiki',
-            message: "{$anakin->name} menandai bug #{$bug3->id} ('{$bug3->title}') sebagai 'Fixed'",
+            message: "{$dev->name} menandai bug #{$bug3->id} ('{$bug3->title}') sebagai 'Done by Development'",
             type: 'status_updated',
             bugId: $bug3->id,
             icon: 'check_circle',
             badgeColor: 'emerald'
         ));
 
-        $obiwan->notify(new BugNotification(
+        $qa->notify(new BugNotification(
             title: 'Status Bug Diperbarui',
-            message: "{$anakin->name} mulai mengerjakan bug #{$bug1->id} ('{$bug1->title}') yang Anda laporkan.",
+            message: "{$dev->name} mulai mengerjakan bug #{$bug1->id} ('{$bug1->title}') yang Anda laporkan.",
             type: 'status_updated',
             bugId: $bug1->id,
             icon: 'sync',
             badgeColor: 'primary'
         ));
 
-        $obiwan->notify(new BugNotification(
+        $qa->notify(new BugNotification(
             title: 'Bug Siap Di-retest',
-            message: "Bug #{$bug3->id} ('{$bug3->title}') telah diperbaiki oleh {$anakin->name}. Siap untuk retest verifikasi.",
+            message: "Bug #{$bug3->id} ('{$bug3->title}') telah diperbaiki oleh {$dev->name}. Siap untuk retest verifikasi.",
             type: 'status_updated',
             bugId: $bug3->id,
             icon: 'check_circle',
             badgeColor: 'emerald'
         ));
 
-        $obiwan->notify(new BugNotification(
+        $qa->notify(new BugNotification(
             title: 'Laporan Bug Diterima',
             message: "Laporan bug #{$bug2->id} ('{$bug2->title}') telah terdaftar dalam sistem antrean.",
             type: 'bug_created',
@@ -152,7 +148,7 @@ class NotificationSeeder extends Seeder
             badgeColor: 'secondary'
         ));
 
-        $anakin->notify(new BugNotification(
+        $dev->notify(new BugNotification(
             title: 'Penugasan Bug Baru',
             message: "Anda telah ditugaskan untuk menangani bug #{$bug1->id}: '{$bug1->title}'",
             type: 'assigned',
@@ -161,7 +157,7 @@ class NotificationSeeder extends Seeder
             badgeColor: 'primary'
         ));
 
-        $anakin->notify(new BugNotification(
+        $dev->notify(new BugNotification(
             title: 'Alert Bug Kritis (P1)',
             message: "Bug prioritas tinggi #{$bug1->id} ('{$bug1->title}') memerlukan perhatian segera.",
             type: 'critical',
@@ -170,7 +166,7 @@ class NotificationSeeder extends Seeder
             badgeColor: 'error'
         ));
 
-        $anakin->notify(new BugNotification(
+        $dev->notify(new BugNotification(
             title: 'Bug Ditugaskan',
             message: "Anda ditugaskan ke bug #{$bug2->id}: '{$bug2->title}'. Prioritas P2.",
             type: 'assigned',

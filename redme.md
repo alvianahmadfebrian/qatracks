@@ -6,13 +6,11 @@ QATrack adalah platform pelacakan dan manajemen bug enterprise yang responsif da
 
 ## 👥 Akun Login & Hak Akses
 
-Semua akun default menggunakan kata sandi: **`pisangkeju`**
-
-| Peran (Role) | Nama / Username | Email | Deskripsi / Hak Akses |
-| :--- | :--- | :--- | :--- |
-| **Super Admin** | `masteryoda` | `yoda@jedi.com` | Akses penuh sistem: Pengelolaan akun pengguna (CRUD), dasbor statistik global, menugaskan ulang bug, serta memantau seluruh aktivitas tiket. |
-| **Support Dev (QA)** | `obiwan` | `obiwan@jedi.com` | Melaporkan bug baru, melihat dasbor statistik khusus bug buatannya sendiri, menerima pembaruan tiket, dan melakukan pengujian ulang (*retest*) atau menutup bug. |
-| **Developer** | `anakin` | `anakin@jedi.com` | Melihat bug yang ditugaskan kepadanya, menerima notifikasi tiket baru / darurat (P1), serta memperbarui status pengerjaan (*In Progress* -> *Fixed*). |
+| Peran (Role) | Nama / Username | Email | Password | Deskripsi / Hak Akses |
+| :--- | :--- | :--- | :--- | :--- |
+| **Super Admin** | `bsn` | `bsn@qatrack.com` | `pisangkeju` | Akses penuh sistem: Pengelolaan akun pengguna (CRUD), dasbor statistik global, menugaskan ulang bug, serta memantau seluruh aktivitas tiket. |
+| **Support Dev (QA)** | `zahra`<br>`mila`<br>`satrio` | `zahra@qatrack.com`<br>`mila@qatrack.com`<br>`satrio@qatrack.com` | `12345678` | Melaporkan bug baru, melihat seluruh bug yang dilaporkan tim QA, mengelola project folder, menerima pembaruan tiket, dan memverifikasi penyelesaian bug. |
+| **Developer** | `alvian`<br>`andri`<br>`dinda` | `alvian@qatrack.com`<br>`andri@qatrack.com`<br>`dinda@qatrack.com` | `12345678` | Melihat bug yang ditugaskan kepadanya, menerima notifikasi tiket baru / darurat (P1), serta memperbarui status pengerjaan (*In Progress* -> *Done by Development*). |
 
 ---
 
