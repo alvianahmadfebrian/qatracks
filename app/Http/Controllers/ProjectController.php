@@ -93,7 +93,8 @@ class ProjectController extends Controller
 
         $bugs = $query->orderByRaw("CASE priority WHEN 'p1' THEN 1 WHEN 'p2' THEN 2 WHEN 'p3' THEN 3 ELSE 4 END ASC")
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
         $developers = User::where('role', 'developer')->orderBy('name')->get();
 
         return view('projects.show', compact('project', 'bugs', 'developers'));

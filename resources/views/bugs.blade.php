@@ -151,7 +151,7 @@
                             <div class="flex items-center gap-2">
                                 <h3 class="font-headline-sm text-headline-sm text-on-background">Distribution by Priority</h3>
                                 <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-primary font-bold">
-                                    {{ $bugs->count() }} Tiket
+                                    {{ $bugs->total() }} Tiket
                                 </span>
                             </div>
                             <p class="text-xs text-secondary mt-0.5">Distribusi prioritas tiket bug. Sistem secara otomatis menaikkan bug dengan prioritas tinggi/kritis ke urutan teratas antrean pengerjaan.</p>
@@ -271,7 +271,7 @@
                             <span class="material-symbols-outlined text-[15px] text-error">sort</span>
                             Urutan Prioritas: <strong>P1 Critical</strong> &rarr; <strong>P2 High</strong> &rarr; <strong>P3 Medium</strong> (Otomatis naik berdasarkan urgensi)
                         </span>
-                        <span class="text-slate-400">Total: {{ $bugs->count() }} tiket</span>
+                        <span class="text-slate-400">Total: {{ $bugs->total() }} tiket</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -373,11 +373,34 @@
                         </table>
                     </div>
 
-                    <div class="bg-surface-container-low border-t border-outline-variant p-4 flex items-center justify-between">
-                        <p class="text-body-md font-body-md text-on-surface-variant">Showing 1 to {{ $bugs->count() }} of {{ $bugs->count() }} entries</p>
-                        <div class="flex gap-2">
-                            <button class="px-3 py-1 rounded border border-outline-variant text-secondary hover:bg-surface-container-highest transition-colors disabled:opacity-50 cursor-pointer" disabled="">Previous</button>
-                            <button class="px-3 py-1 rounded border border-outline-variant text-secondary hover:bg-surface-container-highest transition-colors cursor-pointer">Next</button>
+                    <div class="bg-surface-container-low border-t border-outline-variant p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <p class="text-body-md font-body-md text-on-surface-variant">
+                            Showing {{ $bugs->firstItem() ?? 0 }} to {{ $bugs->lastItem() ?? 0 }} of {{ $bugs->total() }} entries
+                        </p>
+                        <div class="flex items-center gap-1.5">
+                            @if ($bugs->onFirstPage())
+                                <button class="px-3 py-1 rounded border border-outline-variant text-secondary opacity-50 cursor-not-allowed text-xs font-medium" disabled>Previous</button>
+                            @else
+                                <a href="{{ $bugs->previousPageUrl() }}" class="px-3 py-1 rounded border border-outline-variant text-secondary hover:bg-surface-container-highest transition-colors cursor-pointer text-xs font-medium">Previous</a>
+                            @endif
+
+                            @if ($bugs->lastPage() > 1)
+                                <div class="flex items-center gap-1">
+                                    @foreach ($bugs->getUrlRange(1, $bugs->lastPage()) as $page => $url)
+                                        @if ($page == $bugs->currentPage())
+                                            <span class="px-2.5 py-1 rounded border border-primary bg-primary text-white text-xs font-bold">{{ $page }}</span>
+                                        @else
+                                            <a href="{{ $url }}" class="px-2.5 py-1 rounded border border-outline-variant text-secondary hover:bg-surface-container-highest transition-colors text-xs font-medium">{{ $page }}</a>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            @if ($bugs->hasMorePages())
+                                <a href="{{ $bugs->nextPageUrl() }}" class="px-3 py-1 rounded border border-outline-variant text-primary hover:bg-surface-container-highest transition-colors cursor-pointer text-xs font-medium">Next</a>
+                            @else
+                                <button class="px-3 py-1 rounded border border-outline-variant text-secondary opacity-50 cursor-not-allowed text-xs font-medium" disabled>Next</button>
+                            @endif
                         </div>
                     </div>
                 </div>

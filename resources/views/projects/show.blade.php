@@ -249,6 +249,39 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        @if ($bugs->hasPages())
+                            <div class="bg-slate-50 border-t border-slate-100 p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                                <p class="text-secondary font-medium">
+                                    Showing {{ $bugs->firstItem() ?? 0 }} to {{ $bugs->lastItem() ?? 0 }} of {{ $bugs->total() }} entries
+                                </p>
+                                <div class="flex items-center gap-1.5">
+                                    @if ($bugs->onFirstPage())
+                                        <button class="px-3 py-1 rounded border border-slate-200 text-slate-400 opacity-50 cursor-not-allowed text-xs font-medium" disabled>Previous</button>
+                                    @else
+                                        <a href="{{ $bugs->previousPageUrl() }}" class="px-3 py-1 rounded border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer text-xs font-medium">Previous</a>
+                                    @endif
+
+                                    @if ($bugs->lastPage() > 1)
+                                        <div class="flex items-center gap-1">
+                                            @foreach ($bugs->getUrlRange(1, $bugs->lastPage()) as $page => $url)
+                                                @if ($page == $bugs->currentPage())
+                                                    <span class="px-2.5 py-1 rounded border border-primary bg-primary text-white text-xs font-bold">{{ $page }}</span>
+                                                @else
+                                                    <a href="{{ $url }}" class="px-2.5 py-1 rounded border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors text-xs font-medium">{{ $page }}</a>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if ($bugs->hasMorePages())
+                                        <a href="{{ $bugs->nextPageUrl() }}" class="px-3 py-1 rounded border border-slate-200 text-primary hover:bg-slate-100 transition-colors cursor-pointer text-xs font-medium">Next</a>
+                                    @else
+                                        <button class="px-3 py-1 rounded border border-slate-200 text-slate-400 opacity-50 cursor-not-allowed text-xs font-medium" disabled>Next</button>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
                     @else
 
                         <div class="p-12 text-center">
