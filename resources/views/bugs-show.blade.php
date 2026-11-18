@@ -283,7 +283,10 @@
                         @php
                             $ext = strtolower(pathinfo($bug->attachment, PATHINFO_EXTENSION));
                             $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']);
-                            $attachmentUrl = asset('storage/' . $bug->attachment);
+                            $localExists = \Illuminate\Support\Facades\Storage::disk('public')->exists($bug->attachment);
+                            $attachmentUrl = $localExists
+                                ? asset('storage/' . $bug->attachment)
+                                : 'https://qatrack.my.id/storage/' . ltrim($bug->attachment, '/');
                             $formattedSize = $bug->attachment_size ? round($bug->attachment_size / 1048576, 2) . ' MB' : '';
                         @endphp
                         @if ($isImage)

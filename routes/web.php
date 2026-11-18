@@ -9,6 +9,15 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Models\Bug;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+Route::get('/storage/{path}', function (string $path) {
+    if (! Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+
+    return Storage::disk('public')->response($path);
+})->where('path', '.*')->name('storage.serve');
 
 Route::middleware('auth')->group(function () {
 
