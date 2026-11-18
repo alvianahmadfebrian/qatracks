@@ -32,7 +32,15 @@ class ReportController extends Controller
         }
 
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            if ($request->status === 'new') {
+                $query->whereIn('status', ['new', 'open']);
+            } elseif ($request->status === 'done_by_development') {
+                $query->whereIn('status', ['done_by_development', 'fixed', 'resolved']);
+            } elseif ($request->status === 'done_by_support_qa') {
+                $query->whereIn('status', ['done_by_support_qa', 'retest']);
+            } else {
+                $query->where('status', $request->status);
+            }
         }
 
         return $query;
@@ -55,18 +63,20 @@ class ReportController extends Controller
         $devCount = max($devs->count(), 1);
         $bugsPerDev = $totalBugsCount > 0 ? round($totalBugsCount / $devCount, 1) : 0;
 
-        $resolvedBugs = $bugs->whereIn('status', ['fixed', 'resolved', 'closed']);
+        $resolvedBugs = $bugs->whereIn('status', ['done_by_development', 'done_by_support_qa', 'fixed', 'resolved', 'closed']);
         if ($resolvedBugs->count() > 0) {
             $totalDays = $resolvedBugs->reduce(function ($carry, $bug) {
-                return $carry + max($bug->created_at->diffInHours($bug->updated_at) / 24, 0.1);
+                $hours = abs($bug->updated_at->diffInMinutes($bug->created_at)) / 60;
+
+                return $carry + max($hours / 24, 0.1);
             }, 0);
             $avgResolutionTime = round($totalDays / $resolvedBugs->count(), 1);
         } else {
-            $avgResolutionTime = $totalBugsCount > 0 ? 0.0 : 0;
+            $avgResolutionTime = 0;
         }
 
         $resolvedCount = $resolvedBugs->count();
-        $openCount = $bugs->where('status', 'open')->count();
+        $openCount = $bugs->whereIn('status', ['new', 'open'])->count();
         $inProgressCount = $bugs->where('status', 'in_progress')->count();
 
         return view('reports', compact(

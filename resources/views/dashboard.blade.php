@@ -129,9 +129,9 @@
                 }
 
                 $totalBugs = (clone $baseQuery)->count();
-                $openCount = (clone $baseQuery)->where('status', 'open')->count();
+                $openCount = (clone $baseQuery)->whereIn('status', ['new', 'open'])->count();
                 $inProgressCount = (clone $baseQuery)->where('status', 'in_progress')->count();
-                $resolvedCount = (clone $baseQuery)->whereIn('status', ['resolved', 'fixed'])->count();
+                $resolvedCount = (clone $baseQuery)->whereIn('status', ['done_by_development', 'done_by_support_qa', 'resolved', 'fixed', 'closed'])->count();
 
                 $p1Count = (clone $baseQuery)->where('priority', 'p1')->count();
                 $p2Count = (clone $baseQuery)->where('priority', 'p2')->count();
