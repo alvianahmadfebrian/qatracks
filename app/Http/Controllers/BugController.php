@@ -93,6 +93,7 @@ class BugController extends Controller
             'priority' => ['required', 'string', 'in:p1,p2,p3'],
             'status' => ['required', 'string', 'in:new,in_progress,done_by_development,done_by_support_qa,open,fixed,retest,closed,resolved'],
             'developer' => ['nullable', 'string'],
+            'deadline' => ['nullable', 'date'],
             'description' => ['required', 'string'],
             'attachment' => ['nullable', 'file', 'max:5120'],
         ]);
@@ -210,6 +211,7 @@ class BugController extends Controller
             'status' => ['required', 'string', 'in:new,in_progress,done_by_development,done_by_support_qa,open,fixed,retest,closed'],
             'developer' => ['nullable', 'string'],
             'priority' => ['nullable', 'string', 'in:p1,p2,p3'],
+            'deadline' => ['nullable', 'date'],
         ]);
 
         if ($user->role === 'developer') {
@@ -218,13 +220,31 @@ class BugController extends Controller
             }
             unset($validated['developer']);
             unset($validated['priority']);
+            unset($validated['deadline']);
         }
 
         $oldStatus = $bug->status;
         $oldDeveloper = $bug->developer;
         $oldPriority = $bug->priority;
+        $oldDeadline = $bug->deadline ? $bug->deadline->format('Y-m-d') : null;
 
         $bug->update($validated);
+
+        $newDeadline = $bug->deadline ? $bug->deadline->format('Y-m-d') : null;
+        if ($newDeadline !== $oldDeadline && ! empty($bug->developer)) {
+            $assignedDev = User::where('name', $bug->developer)->first();
+            if ($assignedDev && $assignedDev->id !== $user->id) {
+                $deadlineText = $bug->deadline ? $bug->deadline->format('d M Y') : 'Dihapus';
+                $assignedDev->notify(new BugNotification(
+                    title: 'Batas Waktu Bug Diperbarui',
+                    message: "{$user->name} memperbarui deadline bug #{$bug->id} ('{$bug->title}') menjadi: {$deadlineText}.",
+                    type: 'status_updated',
+                    bugId: $bug->id,
+                    icon: 'event',
+                    badgeColor: 'primary'
+                ));
+            }
+        }
 
         if (! empty($validated['priority']) && $oldPriority !== $bug->priority) {
             $priorityLabels = ['p1' => 'P1 (Critical)', 'p2' => 'P2 (High)', 'p3' => 'P3 (Medium/Low)'];

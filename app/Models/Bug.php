@@ -13,12 +13,39 @@ class Bug extends Model
         'priority',
         'status',
         'developer',
+        'deadline',
         'description',
         'reporter_id',
         'attachment',
         'attachment_name',
         'attachment_size',
     ];
+
+    protected $casts = [
+        'deadline' => 'date',
+    ];
+
+    public function isOverdue(): bool
+    {
+        if (! $this->deadline) {
+            return false;
+        }
+
+        $resolvedStatuses = ['done_by_development', 'done_by_support_qa', 'fixed', 'resolved', 'closed'];
+
+        return ! in_array($this->status, $resolvedStatuses) && $this->deadline->isPast() && ! $this->deadline->isToday();
+    }
+
+    public function isDueToday(): bool
+    {
+        if (! $this->deadline) {
+            return false;
+        }
+
+        $resolvedStatuses = ['done_by_development', 'done_by_support_qa', 'fixed', 'resolved', 'closed'];
+
+        return ! in_array($this->status, $resolvedStatuses) && $this->deadline->isToday();
+    }
 
     public function reporter()
     {

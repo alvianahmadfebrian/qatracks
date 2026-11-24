@@ -179,6 +179,25 @@
                         Created {{ $bug->created_at->format('M d, Y') }}
                     </span>
 
+                    @if ($bug->deadline)
+                        @if ($bug->isOverdue())
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-800 font-label-md text-label-md border border-red-300 font-bold" title="Pengerjaan telah melewati batas waktu!">
+                                <span class="material-symbols-outlined text-[15px] text-red-600">event_busy</span>
+                                <span>Deadline: {{ $bug->deadline->format('d M Y') }} (Overdue)</span>
+                            </span>
+                        @elseif ($bug->isDueToday())
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-label-md text-label-md border border-amber-300 font-bold" title="Jatuh tempo hari ini!">
+                                <span class="material-symbols-outlined text-[15px] text-amber-700">timer</span>
+                                <span>Deadline: Hari Ini</span>
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-label-md text-label-md border border-indigo-200" title="Batas waktu pengerjaan oleh developer">
+                                <span class="material-symbols-outlined text-[15px] text-indigo-600">event</span>
+                                <span>Deadline: {{ $bug->deadline->format('d M Y') }}</span>
+                            </span>
+                        @endif
+                    @endif
+
                     @if ($bug->project)
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-label-md text-label-md border border-blue-200">
                             <span class="material-symbols-outlined text-[14px]">folder</span>
@@ -253,6 +272,21 @@
                                     <option value="{{ $dev->name }}" {{ $bug->developer === $dev->name ? 'selected' : '' }}>{{ $dev->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div class="h-6 w-px bg-outline-variant/60 hidden sm:block"></div>
+
+                        <div class="flex items-center gap-2">
+                            <label for="deadline-select" class="text-[11px] font-semibold text-secondary uppercase tracking-wider flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">event</span> Deadline:
+                            </label>
+                            <input
+                                type="date"
+                                id="deadline-select"
+                                name="deadline"
+                                value="{{ $bug->deadline ? $bug->deadline->format('Y-m-d') : '' }}"
+                                class="bg-surface-container-low border border-outline-variant/60 rounded-lg py-1 px-2.5 font-medium text-xs text-on-surface focus:ring-2 focus:ring-primary focus:outline-none cursor-pointer"
+                            />
                         </div>
 
                         <button type="submit" class="px-4 py-1.5 text-white rounded-lg hover:opacity-90 font-medium text-xs flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all ml-1" style="background-color:#1e3a8a;">
@@ -384,6 +418,26 @@
                         <div class="flex justify-between items-center pb-3 border-b border-outline-variant/50">
                             <span class="text-label-md font-label-md text-secondary">Status</span>
                             <span class="text-body-md font-body-md text-primary font-semibold uppercase">{{ str_replace('_', ' ', $bug->status) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-3 border-b border-outline-variant/50">
+                            <span class="text-label-md font-label-md text-secondary">Deadline Pengerjaan</span>
+                            @if ($bug->deadline)
+                                <div class="text-right">
+                                    <span class="text-body-md font-body-md font-semibold {{ $bug->isOverdue() ? 'text-error' : ($bug->isDueToday() ? 'text-amber-600' : 'text-primary') }} flex items-center justify-end gap-1">
+                                        <span class="material-symbols-outlined text-[16px]">{{ $bug->isOverdue() ? 'event_busy' : 'calendar_clock' }}</span>
+                                        {{ $bug->deadline->format('d M Y') }}
+                                    </span>
+                                    @if ($bug->isOverdue())
+                                        <span class="text-[10px] text-error font-bold uppercase tracking-wider block">Terlambat / Overdue</span>
+                                    @elseif ($bug->isDueToday())
+                                        <span class="text-[10px] text-amber-600 font-bold uppercase tracking-wider block">Jatuh Tempo Hari Ini</span>
+                                    @else
+                                        <span class="text-[10px] text-secondary block">{{ $bug->deadline->diffForHumans() }}</span>
+                                    @endif
+                                </div>
+                            @else
+                                <span class="text-body-md font-body-md text-slate-400 italic">Belum ditentukan</span>
+                            @endif
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-label-md font-label-md text-secondary">Dibuat</span>

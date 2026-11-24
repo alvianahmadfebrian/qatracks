@@ -157,6 +157,7 @@
                                         <th class="py-3 px-4">Status</th>
                                         <th class="py-3 px-4">Priority</th>
                                         <th class="py-3 px-4">Assignee</th>
+                                        <th class="py-3 px-4">Deadline</th>
                                         <th class="py-3 px-4">Date</th>
                                         <th class="py-3 px-5 text-right">Action</th>
                                     </tr>
@@ -232,6 +233,29 @@
                                                     </div>
                                                 @else
                                                     <span class="text-slate-400 italic">Unassigned</span>
+                                                @endif
+                                            </td>
+
+                                            <td class="py-3.5 px-4 text-xs whitespace-nowrap">
+                                                @if ($bug->deadline)
+                                                    @if ($bug->isOverdue())
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800" title="Melewati batas waktu">
+                                                            <span class="material-symbols-outlined text-[13px]">event_busy</span>
+                                                            {{ $bug->deadline->format('M d, Y') }}
+                                                        </span>
+                                                    @elseif ($bug->isDueToday())
+                                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800" title="Jatuh tempo hari ini">
+                                                            <span class="material-symbols-outlined text-[13px]">timer</span>
+                                                            Hari Ini
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-flex items-center gap-1 text-xs text-secondary font-medium">
+                                                            <span class="material-symbols-outlined text-[14px] text-primary">calendar_today</span>
+                                                            {{ $bug->deadline->format('M d, Y') }}
+                                                        </span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-slate-400 italic">--</span>
                                                 @endif
                                             </td>
 

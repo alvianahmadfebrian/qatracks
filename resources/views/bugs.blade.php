@@ -282,6 +282,7 @@
                                     <th class="py-3 px-4 font-label-md text-label-md text-secondary uppercase tracking-wider font-medium">Priority</th>
                                     <th class="py-3 px-4 font-label-md text-label-md text-secondary uppercase tracking-wider font-medium">Status</th>
                                     <th class="py-3 px-4 font-label-md text-label-md text-secondary uppercase tracking-wider font-medium">Developer</th>
+                                    <th class="py-3 px-4 font-label-md text-label-md text-secondary uppercase tracking-wider font-medium">Deadline</th>
                                     <th class="py-3 px-4 font-label-md text-label-md text-secondary uppercase tracking-wider font-medium">Created Date</th>
                                     <th class="py-3 px-4 font-label-md text-label-md text-secondary uppercase tracking-wider font-medium text-right">Actions</th>
                                 </tr>
@@ -345,6 +346,28 @@
                                                 Unassigned
                                             @endif
                                         </td>
+                                        <td class="py-4 px-4 font-body-md text-body-md whitespace-nowrap">
+                                            @if ($bug->deadline)
+                                                @if ($bug->isOverdue())
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-200" title="Pengerjaan melewati batas waktu">
+                                                        <span class="material-symbols-outlined text-[13px] text-red-600">event_busy</span>
+                                                        <span>{{ $bug->deadline->format('M d, Y') }}</span>
+                                                    </span>
+                                                @elseif ($bug->isDueToday())
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200" title="Jatuh tempo hari ini">
+                                                        <span class="material-symbols-outlined text-[13px] text-amber-600">timer</span>
+                                                        <span>Hari Ini</span>
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center gap-1 text-xs text-on-surface-variant font-medium">
+                                                        <span class="material-symbols-outlined text-[15px] text-primary">calendar_today</span>
+                                                        <span>{{ $bug->deadline->format('M d, Y') }}</span>
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="text-slate-400 text-xs italic">--</span>
+                                            @endif
+                                        </td>
                                         <td class="py-4 px-4 font-body-md text-body-md text-on-surface-variant">{{ $bug->created_at->format('M d, Y') }}</td>
                                         <td class="py-4 px-4 text-right whitespace-nowrap">
                                             <div class="flex items-center justify-end gap-1.5">
@@ -366,7 +389,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-8 text-center text-on-surface-variant font-medium">No bugs found matching current filters.</td>
+                                        <td colspan="8" class="py-8 text-center text-on-surface-variant font-medium">No bugs found matching current filters.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

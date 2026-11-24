@@ -142,9 +142,9 @@ class ReportController extends Controller
             echo '</head>';
             echo '<body>';
             echo '<table>';
-            echo '<tr><td colspan="9" class="header-title" style="border:none;">QATrack - Bugs &amp; Issues Analytics Report</td></tr>';
-            echo "<tr><td colspan=\"9\" class=\"meta-info\" style=\"border:none;\">Export Date: {$exportDate} | Total Records: {$totalCount} | Exported By: ".htmlspecialchars($user->name)." ({$roleName})</td></tr>";
-            echo '<tr><td colspan="9" class="spacer" style="border:none;"></td></tr>';
+            echo '<tr><td colspan="10" class="header-title" style="border:none;">QATrack - Bugs &amp; Issues Analytics Report</td></tr>';
+            echo "<tr><td colspan=\"10\" class=\"meta-info\" style=\"border:none;\">Export Date: {$exportDate} | Total Records: {$totalCount} | Exported By: ".htmlspecialchars($user->name)." ({$roleName})</td></tr>";
+            echo '<tr><td colspan="10" class="spacer" style="border:none;"></td></tr>';
             echo '<thead>';
             echo '<tr>';
             echo '<th style="width: 100px;">Bug ID</th>';
@@ -153,6 +153,7 @@ class ReportController extends Controller
             echo '<th style="width: 100px;">Priority</th>';
             echo '<th style="width: 130px;">Status</th>';
             echo '<th style="width: 160px;">Developer</th>';
+            echo '<th style="width: 140px;">Deadline</th>';
             echo '<th style="width: 160px;">Reporter</th>';
             echo '<th style="width: 150px;">Created Date</th>';
             echo '<th style="width: 350px;">Description</th>';
@@ -170,6 +171,7 @@ class ReportController extends Controller
                 $statusFormatted = ucfirst(str_replace('_', ' ', $bug->status));
                 $statusClass = 'status-'.strtolower($bug->status);
                 $developer = htmlspecialchars($bug->developer ?: 'Unassigned');
+                $deadlineFormatted = $bug->deadline ? $bug->deadline->format('Y-m-d') : '-';
                 $reporter = htmlspecialchars($bug->reporter ? $bug->reporter->name : 'N/A');
                 $createdDate = $bug->created_at->format('Y-m-d H:i');
                 $description = htmlspecialchars($bug->description);
@@ -181,6 +183,7 @@ class ReportController extends Controller
                 echo "<td class=\"{$priorityClass}\">{$priority}</td>";
                 echo "<td class=\"{$statusClass}\">{$statusFormatted}</td>";
                 echo "<td class=\"text-left\">{$developer}</td>";
+                echo "<td class=\"text-center\">{$deadlineFormatted}</td>";
                 echo "<td class=\"text-left\">{$reporter}</td>";
                 echo "<td class=\"text-center\">{$createdDate}</td>";
                 echo "<td class=\"text-left\">{$description}</td>";

@@ -272,6 +272,7 @@
                                     <th class="p-4 font-label-md text-label-md text-secondary uppercase tracking-wider">Priority</th>
                                     <th class="p-4 font-label-md text-label-md text-secondary uppercase tracking-wider">Status</th>
                                     <th class="p-4 font-label-md text-label-md text-secondary uppercase tracking-wider">Developer</th>
+                                    <th class="p-4 font-label-md text-label-md text-secondary uppercase tracking-wider">Deadline</th>
                                     <th class="p-4 font-label-md text-label-md text-secondary uppercase tracking-wider">Date</th>
                                 </tr>
                             </thead>
@@ -315,11 +316,30 @@
                                             @endif
                                         </td>
                                         <td class="p-4 text-secondary">{{ $bug->developer ?? 'Unassigned' }}</td>
+                                        <td class="p-4 text-xs whitespace-nowrap">
+                                            @if ($bug->deadline)
+                                                @if ($bug->isOverdue())
+                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-100 text-red-700" title="Overdue">
+                                                        <span class="material-symbols-outlined text-[12px]">event_busy</span>
+                                                        {{ $bug->deadline->format('M d') }}
+                                                    </span>
+                                                @elseif ($bug->isDueToday())
+                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800" title="Hari ini">
+                                                        <span class="material-symbols-outlined text-[12px]">timer</span>
+                                                        Hari ini
+                                                    </span>
+                                                @else
+                                                    <span class="text-secondary text-xs">{{ $bug->deadline->format('M d, Y') }}</span>
+                                                @endif
+                                            @else
+                                                <span class="text-slate-400 italic text-xs">--</span>
+                                            @endif
+                                        </td>
                                         <td class="p-4 text-secondary text-sm">{{ $bug->created_at->diffForHumans() }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="p-4 text-center text-secondary">No recent activity.</td>
+                                        <td colspan="7" class="p-4 text-center text-secondary">No recent activity.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

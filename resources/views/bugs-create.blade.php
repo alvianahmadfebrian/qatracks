@@ -205,7 +205,7 @@
                         </div>
                     @endif
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
                         <div>
                             <label class="block font-label-md text-label-md text-on-surface mb-2" for="priority">Priority</label>
@@ -234,6 +234,20 @@
                                     <option value="{{ $dev->name }}" {{ old('developer') == $dev->name ? 'selected' : '' }}>{{ $dev->name }} (Developer)</option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-label-md text-label-md text-on-surface mb-2 flex items-center gap-1" for="deadline">
+                                <span class="material-symbols-outlined text-[15px] text-primary">event</span>
+                                <span>Deadline Pengerjaan</span>
+                            </label>
+                            <input
+                                class="w-full bg-surface-container-lowest border rounded-lg px-4 py-2.5 text-body-md focus:outline-none focus:ring-1 transition-shadow cursor-pointer {{ $errors->has('deadline') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}"
+                                id="deadline"
+                                name="deadline"
+                                value="{{ old('deadline') }}"
+                                type="date"
+                            />
                         </div>
                     </div>
 
