@@ -122,10 +122,10 @@
                 <button
                     type="button"
                     onclick="openGuideModal()"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-primary border border-blue-200 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer shrink-0"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-blue-900 text-white text-xs font-bold shadow-sm transition-all active:scale-95 cursor-pointer shrink-0"
                 >
                     <span class="material-symbols-outlined text-[18px]">menu_book</span>
-                    <span>Panduan Pelaporan Bug</span>
+                    <span>Panduan SOP Pelaporan</span>
                 </button>
             </div>
 
@@ -143,6 +143,34 @@
             <form class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-container-gap" action="{{ route('bugs.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="space-y-6">
+
+                    <!-- Panduan & Standar SOP Pelaporan (Pusat Fokus User) -->
+                    <div class="rounded-xl border border-blue-900/10 bg-gradient-to-r from-[#1e3a8a] via-[#1e40af] to-[#2563eb] text-white p-4 sm:p-5 shadow-sm">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-10 h-10 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center shrink-0 text-amber-300">
+                                    <span class="material-symbols-outlined text-[24px]">menu_book</span>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h4 class="text-sm font-bold text-white tracking-wide">Panduan &amp; Standar Pelaporan Bug (SOP)</h4>
+                                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/25">QA Guidelines</span>
+                                    </div>
+                                    <p class="text-xs text-blue-100/90 mt-1 leading-relaxed">
+                                        Pastikan tiket sesuai standar: penentuan prioritas (P1-P3), SLA batas pengerjaan, dan format langkah reproduksi bug.
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onclick="openGuideModal()"
+                                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white text-[#1e3a8a] hover:bg-blue-50 text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer shrink-0 self-stretch sm:self-auto justify-center"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                <span>Buka Panduan SOP</span>
+                            </button>
+                        </div>
+                    </div>
                     @if($selectedProject)
 
                         <input type="hidden" name="project_id" value="{{ $selectedProject->id }}"/>
