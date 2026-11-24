@@ -114,9 +114,19 @@
 
     <main class="ml-sidebar-width mt-16 w-full h-[calc(100vh-64px)] overflow-y-auto p-section-padding" style="background-color: #F8FAFF;">
         <div class="max-w-4xl mx-auto">
-            <div class="mb-8">
-                <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">Report New Bug</h2>
-                <p class="text-body-md font-body-md text-secondary mt-1">Provide detailed information to help the team reproduce and fix the issue.</p>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">Report New Bug</h2>
+                    <p class="text-body-md font-body-md text-secondary mt-1">Provide detailed information to help the team reproduce and fix the issue.</p>
+                </div>
+                <button
+                    type="button"
+                    onclick="openGuideModal()"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-primary border border-blue-200 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer shrink-0"
+                >
+                    <span class="material-symbols-outlined text-[18px]">menu_book</span>
+                    <span>Panduan Pelaporan Bug</span>
+                </button>
             </div>
 
             @if ($errors->any())
@@ -253,7 +263,18 @@
                     </div>
 
                     <div>
-                        <label class="block font-label-md text-label-md text-on-surface mb-2" for="description">Description &amp; Steps to Reproduce <span class="text-error">*</span></label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block font-label-md text-label-md text-on-surface" for="description">Description &amp; Steps to Reproduce <span class="text-error">*</span></label>
+                            <button
+                                type="button"
+                                onclick="applyBugTemplate()"
+                                class="text-xs text-primary hover:text-blue-900 font-semibold flex items-center gap-1 hover:underline cursor-pointer"
+                                title="Klik untuk menyisipkan format standar pelaporan bug"
+                            >
+                                <span class="material-symbols-outlined text-[15px]">post_add</span>
+                                <span>Gunakan Template Format QA</span>
+                            </button>
+                        </div>
                         <textarea
                             class="w-full bg-surface-container-lowest border rounded-lg px-4 py-3 text-body-md font-mono-code focus:outline-none focus:ring-1 transition-shadow placeholder-outline resize-y {{ $errors->has('description') ? 'border-error focus:border-error focus:ring-error/20' : 'border-outline-variant focus:border-primary focus:ring-primary' }}"
                             id="description"
@@ -309,6 +330,150 @@
             </form>
         </div>
     </main>
+
+    <!-- Modal Panduan Pelaporan Bug -->
+    <div id="guide-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="closeGuideModal()"></div>
+
+        <!-- Modal Box -->
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 px-6 py-5 text-white flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
+                            <span class="material-symbols-outlined text-[24px]">menu_book</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold leading-6" id="modal-title">Panduan &amp; Standar Pelaporan Bug</h3>
+                            <p class="text-xs text-blue-200 mt-0.5">Pedoman QA &amp; SOP Pelaporan Tiket Sistem (IEEE / ISO 29119)</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeGuideModal()" class="text-white/70 hover:text-white rounded-lg p-1.5 hover:bg-white/10 transition-colors cursor-pointer">
+                        <span class="material-symbols-outlined text-[22px]">close</span>
+                    </button>
+                </div>
+
+                <!-- Body Content -->
+                <div class="px-6 py-6 max-h-[70vh] overflow-y-auto space-y-6 text-on-surface">
+                    
+                    <!-- 1. Kriteria Priority -->
+                    <div>
+                        <h4 class="text-sm font-bold text-on-surface uppercase tracking-wider flex items-center gap-2 mb-3">
+                            <span class="w-6 h-6 rounded-lg bg-red-50 text-red-600 flex items-center justify-center text-xs font-bold">1</span>
+                            Kriteria Penentuan Prioritas (Priority Matrix)
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="p-3.5 rounded-xl border border-red-200 bg-red-50/40">
+                                <span class="inline-flex items-center gap-1 font-bold text-red-700 mb-1">
+                                    <span class="w-2 h-2 rounded-full bg-red-600"></span> P1 - High (Critical)
+                                </span>
+                                <p class="text-slate-600 leading-relaxed text-[11px]">
+                                    Sistem crash total, data hilang, transaksi utama terhenti (blocker), atau isu keamanan vital. Tidak ada alternatif (workaround).
+                                </p>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/40">
+                                <span class="inline-flex items-center gap-1 font-bold text-amber-800 mb-1">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> P2 - Medium (High)
+                                </span>
+                                <p class="text-slate-600 leading-relaxed text-[11px]">
+                                    Fitur penting mengalami malfungsi atau validasi error, namun pengguna masih bisa menggunakan fungsi lain atau ada workaround.
+                                </p>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl border border-blue-200 bg-blue-50/40">
+                                <span class="inline-flex items-center gap-1 font-bold text-blue-700 mb-1">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> P3 - Low (Medium/Minor)
+                                </span>
+                                <p class="text-slate-600 leading-relaxed text-[11px]">
+                                    Isu kosmetik antarmuka (UI/UX), kesalahan pengetikan (typo), alignment icon, atau usulan penyempurnaan minor.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Format Penulisan Deskripsi -->
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-bold text-on-surface uppercase tracking-wider flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-primary flex items-center justify-center text-xs font-bold">2</span>
+                                Format Deskripsi &amp; Steps to Reproduce
+                            </h4>
+                            <button
+                                type="button"
+                                onclick="applyBugTemplate(); closeGuideModal();"
+                                class="text-xs px-3 py-1.5 rounded-lg bg-primary text-white hover:bg-blue-900 font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
+                            >
+                                <span class="material-symbols-outlined text-[15px]">post_add</span>
+                                <span>Terapkan Template</span>
+                            </button>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono-code text-xs text-slate-700 space-y-2">
+                            <p class="font-bold text-primary">// Format standar pelaporan bug QA:</p>
+                            <p><strong class="text-slate-900">[STEPS TO REPRODUCE]</strong></p>
+                            <p class="text-slate-600">1. Masuk ke halaman login dengan role QA/Tester.<br/>2. Buka menu X dan pilih data Y.<br/>3. Klik tombol 'Submit' tanpa mengisi field Z.</p>
+                            <p class="mt-2"><strong class="text-slate-900">[EXPECTED RESULT]</strong></p>
+                            <p class="text-slate-600">- Sistem menampilkan pesan validasi "Field Wajib Diisi".</p>
+                            <p class="mt-2"><strong class="text-slate-900">[ACTUAL RESULT]</strong></p>
+                            <p class="text-slate-600">- Terjadi blank screen (Error 500: Undefined variable).</p>
+                            <p class="mt-2"><strong class="text-slate-900">[TEST ENVIRONMENT]</strong></p>
+                            <p class="text-slate-600">- Browser: Chrome v130 | OS: Windows 11 | Akun: support_dev</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Ketentuan Lampiran -->
+                    <div>
+                        <h4 class="text-sm font-bold text-on-surface uppercase tracking-wider flex items-center gap-2 mb-3">
+                            <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold">3</span>
+                            Ketentuan Lampiran Bukti (Attachments)
+                        </h4>
+                        <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-5">
+                            <li>Format yang didukung: <strong>JPG, PNG, PDF</strong> dengan ukuran maksimum <strong>5 MB</strong>.</li>
+                            <li>Sertakan screenshot layar penuh yang menampilkan <strong>pesan error, URL browser, atau console log</strong> terkait.</li>
+                            <li>Hindari memotong screenshot terlalu kecil agar developer dapat mengidentifikasi konteks halaman.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 4. Deadline & SLA Pengerjaan -->
+                    <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs">
+                        <div class="flex items-center gap-2 font-bold text-amber-900 mb-1">
+                            <span class="material-symbols-outlined text-[18px] text-amber-700">timer</span>
+                            <span>Pedoman Batas Waktu (Deadline) Pengerjaan:</span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            Tetapkan <strong>Deadline Pengerjaan</strong> yang realistis sesuai tingkat prioritas: P1 disarankan maksimal <strong>1 x 24 Jam</strong>, P2 maksimal <strong>3 Hari Kerja</strong>, dan P3 maksimal <strong>7 Hari Kerja</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-slate-50 border-t border-slate-200 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <span class="text-xs text-secondary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px] text-primary">verified</span>
+                        Standar Quality Assurance &amp; Software Testing
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onclick="applyBugTemplate(); closeGuideModal();"
+                            class="px-4 py-2 rounded-xl text-primary bg-blue-100 hover:bg-blue-200 text-xs font-semibold transition-colors cursor-pointer"
+                        >
+                            Gunakan Template &amp; Tutup
+                        </button>
+                        <button
+                            type="button"
+                            onclick="closeGuideModal()"
+                            class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold transition-colors cursor-pointer"
+                        >
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function handleProjectChange(val) {
@@ -425,6 +590,54 @@
                 const sizes = ['Bytes', 'KB', 'MB', 'GB'];
                 const i = Math.floor(Math.log(bytes) / Math.log(k));
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            }
+        });
+
+        function openGuideModal() {
+            const modal = document.getElementById('guide-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+        }
+
+        function closeGuideModal() {
+            const modal = document.getElementById('guide-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        function applyBugTemplate() {
+            const textarea = document.getElementById('description');
+            if (!textarea) return;
+
+            const template = `[STEPS TO REPRODUCE]
+1. Masuk ke halaman ...
+2. Buka menu ...
+3. Lakukan aksi ...
+
+[EXPECTED RESULT]
+- Hasil yang seharusnya terjadi sesuai spesifikasi sistem.
+
+[ACTUAL RESULT]
+- Hasil atau pesan error yang sebenarnya terjadi.
+
+[TEST ENVIRONMENT]
+- Browser: Chrome / Edge
+- OS: Windows
+- Role / Akun: QA / Tester`;
+
+            if (!textarea.value.trim() || confirm('Sisipkan format template standar bug ke dalam deskripsi?')) {
+                textarea.value = textarea.value.trim() ? textarea.value + "\n\n" + template : template;
+                textarea.focus();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeGuideModal();
             }
         });
     </script>
