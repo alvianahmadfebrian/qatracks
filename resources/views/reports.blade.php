@@ -278,15 +278,8 @@
                 </div>
 
                 <div class="bg-white rounded-[12px] shadow-xs border border-slate-200/80 overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <div>
-                            <h3 class="text-headline-sm font-headline-sm text-on-surface">Data Rekapitulasi &amp; Export</h3>
-                            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Cetak dokumen resmi PDF yang terkunci atau unduh spreadsheet untuk analisis.</p>
-                        </div>
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-primary border border-blue-200 text-xs font-semibold">
-                            <span class="material-symbols-outlined text-[16px]">verified</span>
-                            <span>Format Standar Pengujian</span>
-                        </span>
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h3 class="text-headline-sm font-headline-sm text-on-surface">Data Rekapitulasi &amp; Export</h3>
                     </div>
 
                     <div class="p-6 lg:p-8 bg-white grid grid-cols-1 md:grid-cols-2 gap-6">
