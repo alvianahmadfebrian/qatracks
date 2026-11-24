@@ -114,19 +114,9 @@
 
     <main class="ml-sidebar-width mt-16 w-full h-[calc(100vh-64px)] overflow-y-auto p-section-padding" style="background-color: #F8FAFF;">
         <div class="max-w-4xl mx-auto">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div>
-                    <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">Report New Bug</h2>
-                    <p class="text-body-md font-body-md text-secondary mt-1">Provide detailed information to help the team reproduce and fix the issue.</p>
-                </div>
-                <button
-                    type="button"
-                    onclick="openGuideModal()"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-blue-900 text-white text-xs font-bold shadow-sm transition-all active:scale-95 cursor-pointer shrink-0"
-                >
-                    <span class="material-symbols-outlined text-[18px]">menu_book</span>
-                    <span>Panduan SOP Pelaporan</span>
-                </button>
+            <div class="mb-8">
+                <h2 class="text-display-lg font-display-lg" style="color:#1e3a8a">Report New Bug</h2>
+                <p class="text-body-md font-body-md text-secondary mt-1">Provide detailed information to help the team reproduce and fix the issue.</p>
             </div>
 
             @if ($errors->any())
