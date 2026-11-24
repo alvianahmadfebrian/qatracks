@@ -5,7 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Sign In - QATrack</title>
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ asset('js/tailwind.min.js') }}"></script>
+    <script>window.tailwind || document.write('<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"><\/script>')</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>

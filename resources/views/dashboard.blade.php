@@ -13,7 +13,8 @@
 
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ asset('js/tailwind.min.js') }}"></script>
+    <script>window.tailwind || document.write('<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"><\/script>')</script>
 
     <script id="tailwind-config">
         tailwind.config = {
