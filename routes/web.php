@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/bugs/{bug}/status', [BugController::class, 'updateStatus'])->name('bugs.status.update');
     Route::delete('/bugs/{bug}', [BugController::class, 'destroy'])->name('bugs.destroy');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+    Route::get('/reports/export-pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
     Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.export.excel');
 
     Route::get('/settings', [ProfileController::class, 'edit'])->name('settings');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bug;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -89,6 +90,38 @@ class ReportController extends Controller
             'inProgressCount',
             'projects'
         ));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role === 'developer') {
+            abort(403, 'Developers are not authorized to export reports.');
+        }
+
+        $query = $this->buildFilteredQuery($request);
+        $bugs = $query->orderBy('created_at', 'desc')->get();
+
+        $period = $request->input('period', '30days');
+        $periodLabels = [
+            '7days' => '7 Hari Terakhir',
+            '30days' => '30 Hari Terakhir',
+            '90days' => '90 Hari Terakhir',
+            'this_year' => 'Tahun Ini',
+            'all' => 'Semua Waktu',
+        ];
+        $periodLabel = $periodLabels[$period] ?? '30 Hari Terakhir';
+
+        $pdf = Pdf::loadView('reports-pdf', compact('bugs', 'periodLabel'))
+            ->setPaper('a4', 'landscape');
+
+        $filename = 'QATrack_Rekapitulasi_Bug_'.now()->format('Y-m-d_His').'.pdf';
+
+        if ($request->query('view') === 'preview') {
+            return $pdf->stream($filename);
+        }
+
+        return $pdf->download($filename);
     }
 
     public function exportExcel(Request $request): StreamedResponse

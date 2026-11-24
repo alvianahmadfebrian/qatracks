@@ -278,28 +278,84 @@
                 </div>
 
                 <div class="bg-white rounded-[12px] shadow-xs border border-slate-200/80 overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
-                            <h3 class="text-headline-sm font-headline-sm text-on-surface">Data Export</h3>
-                            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Generate comprehensive reports for stakeholder review.</p>
+                            <h3 class="text-headline-sm font-headline-sm text-on-surface">Data Rekapitulasi &amp; Export</h3>
+                            <p class="text-body-md font-body-md text-on-surface-variant mt-1">Cetak dokumen resmi PDF yang terkunci atau unduh spreadsheet untuk analisis.</p>
                         </div>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-primary border border-blue-200 text-xs font-semibold">
+                            <span class="material-symbols-outlined text-[16px]">verified</span>
+                            <span>Format Standar Pengujian</span>
+                        </span>
                     </div>
-                    <div class="p-8 flex flex-col items-center justify-center bg-white">
 
-                        <div class="flex flex-col items-center p-8 border border-emerald-500/20 rounded-2xl bg-white hover:bg-emerald-50/30 transition-all max-w-md w-full shadow-xs text-center">
-                            <div class="w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-4 shadow-md shadow-emerald-600/20 transition-transform">
-                                <span class="material-symbols-outlined text-[32px]">table_chart</span>
+                    <div class="p-6 lg:p-8 bg-white grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- 1. Card Utama: Export PDF (Rekomendasi Penguji & Tamper-Proof) -->
+                        <div class="flex flex-col justify-between p-6 sm:p-7 border-2 border-red-500/30 rounded-2xl bg-gradient-to-b from-red-50/40 via-white to-white hover:border-red-500/50 transition-all shadow-sm relative">
+                            <div class="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-red-600 text-white text-[11px] font-bold uppercase tracking-wider shadow-xs">
+                                Rekomendasi Penguji
                             </div>
-                            <h4 class="text-headline-sm font-headline-sm text-on-surface font-bold">Export to Excel</h4>
-                            <p class="text-body-md font-body-md text-on-surface-variant mt-2 max-w-xs">
-                                Unduh seluruh data laporan bug dalam format spreadsheet Excel / CSV lengkap dengan rincian status dan penugasan.
-                            </p>
-                            <a href="{{ route('reports.export.excel', request()->query()) }}" class="mt-6 w-full py-3 text-white rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-emerald-700 transition-all active:scale-[0.98] shadow-md shadow-emerald-600/20 cursor-pointer bg-emerald-600">
-                                <span class="material-symbols-outlined text-[20px]">download</span>
-                                Download Excel Report
-                            </a>
-                            <span class="text-[11px] text-secondary mt-3">Kompatibel dengan Microsoft Excel, Google Sheets, & Apple Numbers</span>
+
+                            <div>
+                                <div class="w-14 h-14 rounded-2xl bg-red-600 text-white flex items-center justify-center mb-4 shadow-md shadow-red-600/20">
+                                    <span class="material-symbols-outlined text-[30px]">picture_as_pdf</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    Rekapitulasi PDF (Dokumen Resmi)
+                                </h4>
+                                <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                                    Format dokumen terkunci dan tidak dapat dimanipulasi (*tamper-proof*). Menyajikan <strong>9 kolom inti</strong> rekapitulasi data: Bug ID, Title, Project, Priority, Status, Developer, Reporter, Created Date, dan Resolution Time (khusus bug closed).
+                                </p>
+                            </div>
+
+                            <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row gap-2.5">
+                                <a
+                                    href="{{ route('reports.export.pdf', request()->query()) }}"
+                                    class="flex-1 py-2.5 px-4 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-all active:scale-[0.98] shadow-md shadow-red-600/20 cursor-pointer bg-red-600"
+                                >
+                                    <span class="material-symbols-outlined text-[18px]">download</span>
+                                    <span>Download PDF Resmi</span>
+                                </a>
+                                <a
+                                    href="{{ route('reports.export.pdf', array_merge(request()->query(), ['view' => 'preview'])) }}"
+                                    target="_blank"
+                                    class="py-2.5 px-4 bg-white border border-red-200 text-red-700 hover:bg-red-50 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] cursor-pointer"
+                                    title="Buka preview PDF di tab baru untuk langsung dicetak"
+                                >
+                                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                    <span>Preview / Cetak</span>
+                                </a>
+                            </div>
+                            <span class="text-[11px] text-slate-400 mt-3 block text-center sm:text-left">&bull; Standar A4 Landscape &bull; Terkunci &bull; Dilengkapi Lembar Pengesahan</span>
                         </div>
+
+                        <!-- 2. Card Sekunder: Export Excel -->
+                        <div class="flex flex-col justify-between p-6 sm:p-7 border border-slate-200/80 rounded-2xl bg-white hover:border-emerald-500/40 transition-all shadow-xs">
+                            <div>
+                                <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-4 shadow-md shadow-emerald-600/20">
+                                    <span class="material-symbols-outlined text-[30px]">table_chart</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-slate-900">
+                                    Export Spreadsheet Excel
+                                </h4>
+                                <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                                    Unduh data lengkap laporan bug dalam format spreadsheet untuk keperluan analisis statistik lanjutan atau pivot table.
+                                </p>
+                            </div>
+
+                            <div class="mt-6 pt-5 border-t border-slate-100">
+                                <a
+                                    href="{{ route('reports.export.excel', request()->query()) }}"
+                                    class="w-full py-2.5 px-4 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-emerald-700 transition-all active:scale-[0.98] shadow-md shadow-emerald-600/20 cursor-pointer bg-emerald-600"
+                                >
+                                    <span class="material-symbols-outlined text-[18px]">download</span>
+                                    <span>Download Excel Data</span>
+                                </a>
+                            </div>
+                            <span class="text-[11px] text-slate-400 mt-3 block text-center sm:text-left">&bull; Kompatibel dengan MS Excel, Google Sheets, &amp; Apple Numbers</span>
+                        </div>
+
                     </div>
                 </div>
             </div>
