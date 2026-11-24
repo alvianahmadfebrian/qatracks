@@ -1,0 +1,67 @@
+classDiagram
+    direction LR
+
+    class User {
+        +bigint id
+        +string name
+        +string email
+        +string password
+        +string role
+        +timestamp email_verified_at
+        +string remember_token
+        +timestamp created_at
+        +timestamp updated_at
+        +notifications() MorphMany
+        +unreadNotifications() MorphMany
+    }
+
+    class Project {
+        +bigint id
+        +string name
+        +text description
+        +bigint created_by
+        +timestamp created_at
+        +timestamp updated_at
+        +bugs() HasMany
+        +creator() BelongsTo
+    }
+
+    class Bug {
+        +bigint id
+        +bigint project_id
+        +string project
+        +string title
+        +string priority
+        +string status
+        +string developer
+        +date deadline
+        +text description
+        +bigint reporter_id
+        +string attachment
+        +string attachment_name
+        +int attachment_size
+        +timestamp created_at
+        +timestamp updated_at
+        +isOverdue() bool
+        +isDueToday() bool
+        +reporter() BelongsTo
+        +projectFolder() BelongsTo
+    }
+
+    class DatabaseNotification {
+        +uuid id
+        +string type
+        +string notifiable_type
+        +bigint notifiable_id
+        +text data
+        +timestamp read_at
+        +timestamp created_at
+        +timestamp updated_at
+        +markAsRead() void
+        +markAsUnread() void
+    }
+
+    User "1" --> "0..*" Project : creates
+    User "1" --> "0..*" Bug : reports
+    User "1" --> "0..*" DatabaseNotification : receives
+    Project "1" --> "0..*" Bug : contains

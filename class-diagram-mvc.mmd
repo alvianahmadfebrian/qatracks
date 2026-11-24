@@ -1,0 +1,110 @@
+classDiagram
+    direction TB
+
+    %% Model Layer
+    class User {
+        +bigint id
+        +string name
+        +string email
+        +string password
+        +string role
+        +notifications()
+    }
+
+    class Project {
+        +bigint id
+        +string name
+        +text description
+        +bigint created_by
+        +bugs()
+        +creator()
+    }
+
+    class Bug {
+        +bigint id
+        +bigint project_id
+        +string title
+        +string priority
+        +string status
+        +string developer
+        +date deadline
+        +text description
+        +bigint reporter_id
+        +isOverdue() bool
+        +isDueToday() bool
+    }
+
+    class DatabaseNotification {
+        +uuid id
+        +string type
+        +bigint notifiable_id
+        +text data
+        +timestamp read_at
+        +markAsRead() void
+    }
+
+    %% Controller Layer
+    class BugController {
+        +index(Request) View
+        +create(Request) View
+        +store(Request) RedirectResponse
+        +show(Bug) View
+        +edit(Bug) View
+        +update(Request, Bug) RedirectResponse
+        +destroy(Bug) RedirectResponse
+        +updateStatus(Request, Bug) JsonResponse
+        +updateAssignee(Request, Bug) JsonResponse
+        +bulkDestroy(Request) JsonResponse
+        +export(Request) BinaryFileResponse
+    }
+
+    class ProjectController {
+        +index() View
+        +store(Request) RedirectResponse
+        +show(Project) View
+        +update(Request, Project) RedirectResponse
+        +destroy(Project) RedirectResponse
+    }
+
+    class ReportController {
+        +index(Request) View
+        +exportPdf(Request) Response
+        +exportExcel(Request) BinaryFileResponse
+    }
+
+    class UserController {
+        +index() View
+        +create() View
+        +store(Request) RedirectResponse
+        +edit(User) View
+        +update(Request, User) RedirectResponse
+        +destroy(User) RedirectResponse
+    }
+
+    class NotificationController {
+        +index(Request) JsonResponse
+        +markAsRead(Request, id) JsonResponse
+        +markAllAsRead(Request) JsonResponse
+    }
+
+    class LoginController {
+        +showLoginForm() View
+        +login(Request) RedirectResponse
+        +logout(Request) RedirectResponse
+    }
+
+    %% Entity Relations
+    User "1" --> "0..*" Project : creates
+    User "1" --> "0..*" Bug : reports
+    User "1" --> "0..*" DatabaseNotification : receives
+    Project "1" --> "0..*" Bug : contains
+
+    %% MVC Dependencies
+    BugController ..> Bug : manages
+    BugController ..> Project : uses
+    ProjectController ..> Project : manages
+    ReportController ..> Bug : queries
+    ReportController ..> Project : queries
+    UserController ..> User : manages
+    NotificationController ..> DatabaseNotification : handles
+    LoginController ..> User : authenticates
